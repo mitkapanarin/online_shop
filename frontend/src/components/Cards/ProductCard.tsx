@@ -1,17 +1,11 @@
 import { Component } from "react";
+import { IProductCardProps } from "../../types/interface";
 
-interface ProductCardProps {
-  image: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-export class ProductCard extends Component<ProductCardProps> {
+export class ProductCard extends Component<IProductCardProps> {
   render() {
-    const { image, name, price, quantity } = this.props;
+    const { image, name, price, quantity, id } = this.props;
     return (
-      <div className="">
+      <div className="capitalize" id={id}>
         <div className="relative">
           <img
             src={image}
