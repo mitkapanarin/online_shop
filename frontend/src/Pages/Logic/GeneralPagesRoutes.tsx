@@ -6,23 +6,28 @@ import { changeCartModalState, RootState } from "../../store";
 import { containerSettings } from "../../CONSTANTS/Constants";
 import { Dispatch } from "redux";
 
-export class GeneralPagesRoutes extends Component<{
+export interface IGeneralPagesRoutesProps {
   isModalActive: boolean;
   changeCartModalState: (isActive: boolean) => void;
-}> {
-  handleCartClick = () => {
-    const { isModalActive, changeCartModalState } = this.props;
-    changeCartModalState(!isModalActive);
-  };
+}
+
+export class GeneralPagesRoutes extends Component<IGeneralPagesRoutesProps> {
+  constructor(props: IGeneralPagesRoutesProps) {
+    super(props);
+  }
+
   render() {
-    const { isModalActive } = this.props;
+    const { isModalActive, changeCartModalState } = this.props;
     return (
       <div className="">
         <Navbar />
         <div
-          className={`py-4 min-h-screen ${isModalActive ? "bg-gray-500 filter brightness-50 pointer-events-none" : ""}`}
+          onClick={() => changeCartModalState(false)}
+          className={`py-4 min-h-screen ${isModalActive && "bg-gray-500 filter brightness-50"}`}
         >
-          <div onClick={this.handleCartClick} className={containerSettings}>
+          <div
+            className={`${containerSettings} ${isModalActive && "pointer-events-none"}`}
+          >
             <Outlet />
           </div>
         </div>
@@ -30,6 +35,7 @@ export class GeneralPagesRoutes extends Component<{
     );
   }
 }
+
 const reduxStateProps = (state: RootState) => ({
   isModalActive: state.cartModalState.isActive,
 });
