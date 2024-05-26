@@ -26,16 +26,33 @@ export class Navbar extends Component<WithRouterProps> {
         ? "text-red-500 border-b-2 border-red-500 pb-3"
         : "text-black";
 
+    const addDataTestIdFn = (route: string) =>
+      currentPath == route
+        ? "active-category-link category-link"
+        : "category-link";
+
     return (
       <div className="flex justify-between my-4">
         <div className="uppercase flex gap-6">
-          <Link to="/women" className={pathDetector("/women")}>
+          <Link
+            to="/women"
+            data-testid={addDataTestIdFn("/women")}
+            className={pathDetector("/women")}
+          >
             Women
           </Link>
-          <Link to="/men" className={pathDetector("/men")}>
+          <Link
+            to="/men"
+            data-testid={addDataTestIdFn("/men")}
+            className={pathDetector("/men")}
+          >
             men
           </Link>
-          <Link to="/kids" className={pathDetector("/kids")}>
+          <Link
+            to="/kids"
+            data-testid={addDataTestIdFn("/kids")}
+            className={pathDetector("/kids")}
+          >
             kids
           </Link>
         </div>
