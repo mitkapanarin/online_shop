@@ -26,13 +26,12 @@ interface NavbarProps extends WithRouterProps {
 }
 
 export class Navbar extends Component<NavbarProps> {
-  handleCartClick = () => {
-    const { isModalActive, changeCartModalState } = this.props;
-    changeCartModalState(!isModalActive);
-  };
+  constructor(props: NavbarProps) {
+    super(props);
+  }
 
   render() {
-    const { location, isModalActive } = this.props;
+    const { changeCartModalState, isModalActive, location } = this.props;
     const currentPath = location.pathname;
     const pathDetector = (route: string) =>
       currentPath === route
@@ -71,7 +70,10 @@ export class Navbar extends Component<NavbarProps> {
             </Link>
           </div>
           <div className="">Logo</div>
-          <button className="" onClick={this.handleCartClick}>
+          <button
+            className=""
+            onClick={() => changeCartModalState(!isModalActive)}
+          >
             <HiOutlineShoppingCart className="cursor-pointer" />
           </button>
         </div>
