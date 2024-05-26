@@ -3,6 +3,11 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { cartSlice } from "./Slices/cartSlice";
+import {
+  cartModalSlice,
+  changeCartModalState,
+  resetCartModalState,
+} from "./Slices/cartModalSlice";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +19,7 @@ const persistedCartReducer = persistReducer(persistConfig, cartSlice.reducer);
 export const store = configureStore({
   reducer: {
     cart: persistedCartReducer,
+    cartModalState: cartModalSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -29,3 +35,5 @@ setupListeners(store.dispatch);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export type AppStore = typeof store;
+
+export { changeCartModalState, resetCartModalState };

@@ -1,23 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-interface SystemState {
+interface ICartSlice {
   x: number;
 }
 
-const initialState: SystemState = {
+const initialState: ICartSlice = {
   x: 0,
 };
 
 export const cartSlice = createSlice({
-  name: "system",
+  name: "cart",
   initialState,
   reducers: {
     // update later
-    addItemToCart: (state: SystemState, action: PayloadAction<number>) => {
+    addItemToCart: (state: ICartSlice, action: PayloadAction<number>) => {
       state.x = action.payload;
     },
-    removeItemFromCart: (state: SystemState, action: PayloadAction<number>) => {
+    removeItemFromCart: (state: ICartSlice, action: PayloadAction<number>) => {
       state.x = action.payload;
     },
     resetCart: () => initialState,
