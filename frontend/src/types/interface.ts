@@ -11,3 +11,8 @@ export interface IProductCardProps {
   price: number;
   stock: number;
 }
+
+export interface ICartItem {
+  id: string;
+  quantity: number;
+}

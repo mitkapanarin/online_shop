@@ -7,12 +7,10 @@ import {
   addItemToCart,
   removeItemFromCart,
   resetCart,
-} from "./Slices/cartSlice";
-import {
-  cartModalSlice,
+  resetCartItems,
+  resetCartState,
   changeCartModalState,
-  resetCartModalState,
-} from "./Slices/cartModalSlice";
+} from "./Slices/cartSlice";
 
 const persistConfig = {
   key: "root",
@@ -24,7 +22,6 @@ const persistedCartReducer = persistReducer(persistConfig, cartSlice.reducer);
 export const store = configureStore({
   reducer: {
     cart: persistedCartReducer,
-    cartModalState: cartModalSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -42,12 +39,10 @@ export type AppDispatch = typeof store.dispatch;
 export type AppStore = typeof store;
 
 export {
-  // cartModalSlice,
-  changeCartModalState,
-  resetCartModalState,
-
-  // cartSlice,
   addItemToCart,
   removeItemFromCart,
   resetCart,
+  resetCartItems,
+  resetCartState,
+  changeCartModalState,
 };

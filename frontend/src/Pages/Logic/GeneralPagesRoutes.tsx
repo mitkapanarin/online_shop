@@ -37,7 +37,7 @@ export class GeneralPagesRoutes extends Component<IGeneralPagesRoutesProps> {
 }
 
 const reduxStateProps = (state: RootState) => ({
-  isModalActive: state.cartModalState.isActive,
+  isModalActive: state.cart.isCartModalActive,
 });
 
 const reduxDispatchProps = (dispatch: Dispatch) => ({

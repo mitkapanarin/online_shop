@@ -84,7 +84,7 @@ export class Navbar extends Component<NavbarProps> {
 }
 
 const reduxStateProps = (state: RootState) => ({
-  isModalActive: state.cartModalState.isActive,
+  isModalActive: state.cart.isCartModalActive,
 });
 
 const reduxDispatchProps = (dispatch: Dispatch) => ({
