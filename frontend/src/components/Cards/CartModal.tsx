@@ -2,30 +2,7 @@ import { Component } from "react";
 import CartCard from "./CartCard";
 import { connect } from "react-redux";
 import { RootState } from "../../store";
-
-const xxxx = [
-  {
-    id: "1",
-    name: "White T-Shirt",
-    image: "./sample-image.jpg",
-    price: 25,
-    stock: 10,
-  },
-  {
-    id: "2",
-    name: "second White T-Shirt",
-    image: "./sample-image.jpg",
-    price: 25,
-    stock: 0,
-  },
-  {
-    id: "3",
-    name: "third White T-Shirt",
-    image: "./sample-image.jpg",
-    price: 25,
-    stock: 10,
-  },
-];
+import { data } from "../../Data/data";
 
 export class CartModal extends Component<{
   cartState: RootState["cart"];
@@ -43,7 +20,7 @@ export class CartModal extends Component<{
             <h3 className="text-center">Cart is empty</h3>
           )}
           {cartStateObject?.map((item) => {
-            const product = xxxx.find((p) => p.id === item.id);
+            const product = data.find((p) => p.id === item.id);
             if (!product) {
               return;
             }
