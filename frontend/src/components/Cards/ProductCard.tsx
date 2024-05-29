@@ -27,7 +27,7 @@ export class ProductCard extends Component<
       image,
       name,
       price,
-      quantity,
+      stock,
       id,
       isSelected,
       addToCartFn,
@@ -46,14 +46,14 @@ export class ProductCard extends Component<
           <img
             src={image}
             alt={name}
-            className={`w-full h-72 object-cover ${quantity === 0 ? "filter brightness-50" : ""}`}
+            className={`w-full h-72 object-cover ${stock === 0 ? "filter brightness-50" : ""}`}
           />
-          {quantity === 0 && (
+          {stock === 0 && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-xl font-light">
               Out of Stock
             </div>
           )}
-          {isHovered && isSelected == false && quantity > 0 && (
+          {isHovered && isSelected == false && stock > 0 && (
             <button
               type="button"
               className="cursor-pointer absolute bottom-[-20px] right-4 bg-green-400 p-3 rounded-full shadow-lg"
@@ -63,7 +63,7 @@ export class ProductCard extends Component<
             </button>
           )}
 
-          {isHovered && isSelected == true && quantity > 0 && (
+          {isHovered && isSelected == true && stock > 0 && (
             <button
               type="button"
               className="cursor-pointer absolute bottom-[-20px] right-4 bg-green-400 p-3 rounded-full shadow-lg"
@@ -75,7 +75,7 @@ export class ProductCard extends Component<
         </div>
         <h3 className="text-lg font-semibold mt-4">{name}</h3>
         <h6 className="text-md font-medium text-gray-700">$ {price}</h6>
-        <p className="text-sm text-gray-600">Quantity: {quantity}</p>
+        <p className="text-sm text-gray-600">stock: {stock}</p>
       </div>
     );
   }

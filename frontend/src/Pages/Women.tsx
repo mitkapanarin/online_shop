@@ -9,21 +9,21 @@ export class Women extends Component {
       name: "White T-Shirt",
       image: "./sample-image.jpg",
       price: 25,
-      quantity: 10,
+      stock: 10,
     },
     {
       id: "2",
       name: "second White T-Shirt",
       image: "./sample-image.jpg",
       price: 25,
-      quantity: 0,
+      stock: 0,
     },
     {
       id: "3",
       name: "third White T-Shirt",
       image: "./sample-image.jpg",
       price: 25,
-      quantity: 10,
+      stock: 10,
     },
   ];
 
