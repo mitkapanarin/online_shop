@@ -8,20 +8,7 @@ interface ICartSliceStateProps {
 }
 
 const initialState: ICartSliceStateProps = {
-  cart: [
-    {
-      id: "1",
-      quantity: 10,
-    },
-    {
-      id: "2",
-      quantity: 2,
-    },
-    {
-      id: "3",
-      quantity: 0,
-    },
-  ],
+  cart: [],
   isCartModalActive: false,
 };
 
@@ -42,23 +29,25 @@ export const cartSlice = createSlice({
         state.cart.push(action.payload);
       }
     },
+
     removeItemFromCart: (
       state: ICartSliceStateProps,
-      // action: PayloadAction<ICartItem>,
+      action: PayloadAction<ICartItem>,
     ) => {
-      return state;
-      // const { id, quantity } = action.payload;
-      // const existingItem = state.cart.find((item) => item.id === id);
-      // if (!existingItem) {
-      //   return;
-      // }
-      // if (existingItem) {
-      //   if (existingItem.quantity > quantity) {
-      //     existingItem.quantity -= quantity;
-      //   } else {
-      //     return state.cart.filter((item) => item.id !== id);
-      //   }
-      // }
+      const { id, quantity } = action.payload;
+      const existingItem = state.cart.find(
+        (item) => item.id === id,
+      ) as ICartItem;
+
+      if (!existingItem) {
+        return;
+      } else {
+        if (existingItem.quantity > quantity) {
+          existingItem.quantity -= quantity;
+        } else {
+          state.cart = state.cart.filter((item) => item.id !== id);
+        }
+      }
     },
 
     changeCartModalState: (

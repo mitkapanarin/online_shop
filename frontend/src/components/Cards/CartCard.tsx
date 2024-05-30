@@ -2,17 +2,20 @@ import { Component } from "react";
 import { IProductCardProps } from "../../types/interface";
 import { textLimiter } from "../Text/textFn";
 
-export class CartCard extends Component<
-  IProductCardProps & {
-    quantity: number;
-  }
-> {
-  constructor(props: IProductCardProps & { quantity: number }) {
+interface ICartCardProps {
+  quantity: number;
+  incrementFn: () => void;
+  decrementFn: () => void;
+}
+
+export class CartCard extends Component<IProductCardProps & ICartCardProps> {
+  constructor(props: IProductCardProps & ICartCardProps) {
     super(props);
   }
 
   render() {
-    const { id, image, name, price, quantity } = this.props;
+    const { image, name, price, quantity, incrementFn, decrementFn } =
+      this.props;
     return (
       <div className="flex justify-between items-center">
         <div className="">
@@ -25,9 +28,9 @@ export class CartCard extends Component<
             <span>☑️☑️☑️☑️</span>
           </div>
           <div className="flex gap-6">
-            <button onClick={() => console.log("incr", id)}>+</button>
+            <button onClick={incrementFn}>+</button>
             <span>{quantity}</span>
-            <button onClick={() => console.log("decr", id)}>-</button>
+            <button onClick={decrementFn}>-</button>
           </div>
         </div>
         <img
