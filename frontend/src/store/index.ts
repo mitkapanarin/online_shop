@@ -11,6 +11,7 @@ import {
   resetCartState,
   changeCartModalState,
 } from "./Slices/cartSlice";
+import { fetchDataAPI, useGetAllProductsQuery } from "./API/fetchDataAPI";
 
 const persistConfig = {
   key: "root",
@@ -22,11 +23,12 @@ const persistedCartReducer = persistReducer(persistConfig, cartSlice.reducer);
 export const store = configureStore({
   reducer: {
     cart: persistedCartReducer,
+    [fetchDataAPI.reducerPath]: fetchDataAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(),
+    }).concat(fetchDataAPI.middleware),
 });
 
 export const persistedStore = persistStore(store);
@@ -45,4 +47,7 @@ export {
   resetCartItems,
   resetCartState,
   changeCartModalState,
+
+  // fetchDataAPI
+  useGetAllProductsQuery,
 };
