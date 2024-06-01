@@ -28,17 +28,13 @@
       },
       "type": "library",
       "autoload": {
-        "files": [
-          "src/functions.php"
-        ],
+        "files": ["src/functions.php"],
         "psr-4": {
           "FastRoute\\": "src/"
         }
       },
       "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "BSD-3-Clause"
-      ],
+      "license": ["BSD-3-Clause"],
       "authors": [
         {
           "name": "Nikita Popov",
@@ -46,10 +42,7 @@
         }
       ],
       "description": "Fast request router for PHP",
-      "keywords": [
-        "router",
-        "routing"
-      ],
+      "keywords": ["router", "routing"],
       "support": {
         "issues": "https://github.com/nikic/FastRoute/issues",
         "source": "https://github.com/nikic/FastRoute/tree/master"
@@ -109,15 +102,10 @@
         }
       },
       "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
+      "license": ["MIT"],
       "description": "A PHP port of GraphQL reference implementation",
       "homepage": "https://github.com/webonyx/graphql-php",
-      "keywords": [
-        "api",
-        "graphql"
-      ],
+      "keywords": ["api", "graphql"],
       "support": {
         "issues": "https://github.com/webonyx/graphql-php/issues",
         "source": "https://github.com/webonyx/graphql-php/tree/v15.11.1"
