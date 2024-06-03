@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "5897749c9b8e3eabcb319c220dbb8613",
+  "content-hash": "7afc8866a9ea9758e47f92045ebefccf",
   "packages": [
     {
       "name": "nikic/fast-route",
@@ -28,13 +28,17 @@
       },
       "type": "library",
       "autoload": {
-        "files": ["src/functions.php"],
+        "files": [
+          "src/functions.php"
+        ],
         "psr-4": {
           "FastRoute\\": "src/"
         }
       },
       "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
+      "license": [
+        "BSD-3-Clause"
+      ],
       "authors": [
         {
           "name": "Nikita Popov",
@@ -42,7 +46,10 @@
         }
       ],
       "description": "Fast request router for PHP",
-      "keywords": ["router", "routing"],
+      "keywords": [
+        "router",
+        "routing"
+      ],
       "support": {
         "issues": "https://github.com/nikic/FastRoute/issues",
         "source": "https://github.com/nikic/FastRoute/tree/master"
@@ -102,10 +109,15 @@
         }
       },
       "notification-url": "https://packagist.org/downloads/",
-      "license": ["MIT"],
+      "license": [
+        "MIT"
+      ],
       "description": "A PHP port of GraphQL reference implementation",
       "homepage": "https://github.com/webonyx/graphql-php",
-      "keywords": ["api", "graphql"],
+      "keywords": [
+        "api",
+        "graphql"
+      ],
       "support": {
         "issues": "https://github.com/webonyx/graphql-php/issues",
         "source": "https://github.com/webonyx/graphql-php/tree/v15.11.1"
@@ -125,7 +137,9 @@
   "stability-flags": [],
   "prefer-stable": false,
   "prefer-lowest": false,
-  "platform": [],
+  "platform": {
+    "ext-pdo": "*"
+  },
   "platform-dev": [],
   "plugin-api-version": "2.6.0"
 }
