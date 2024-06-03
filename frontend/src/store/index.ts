@@ -11,7 +11,7 @@ import {
   resetCartState,
   changeCartModalState,
 } from "./Slices/cartSlice";
-import { fetchDataAPI, useGetAllProductsQuery } from "./API/fetchDataAPI";
+import { fetchDataAPI, useGetAllProductsMutation } from "./API/fetchDataAPI";
 
 const persistConfig = {
   key: "root",
@@ -49,5 +49,5 @@ export {
   changeCartModalState,
 
   // fetchDataAPI
-  useGetAllProductsQuery,
+  useGetAllProductsMutation,
 };

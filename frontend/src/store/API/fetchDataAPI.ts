@@ -4,18 +4,22 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const fetchDataAPI = createApi({
   reducerPath: "fetchDataAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost/store/get_products.php",
+    baseUrl: "http://localhost:8000",
   }),
-  tagTypes: ["products", "categories", "cart"],
+  tagTypes: ["products"],
   endpoints: (builder) => ({
-    getAllProducts: builder.query({
-      query: ({}: {}) => ({
-        url: "/api/campaigns/createCampaign",
-        method: "GET",
+    getAllProducts: builder.mutation<any, void>({
+      query: () => ({
+        url: "/graphql",
+        method: "POST",
+        body: {
+          query:
+            "{ categories { id name __typename } products { id name instock gallery description brand __typename } }",
+        },
       }),
-      providesTags: ["products"],
+      invalidatesTags: ["products"],
     }),
   }),
 });
 
-export const { useGetAllProductsQuery } = fetchDataAPI;
+export const { useGetAllProductsMutation } = fetchDataAPI;
