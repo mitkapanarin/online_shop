@@ -1,13 +1,29 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import ProductCard from "../components/Cards/ProductCard";
+import { addItemToCart, removeItemFromCart, RootState } from "../store";
+import { Dispatch } from "redux";
+import { connect } from "react-redux";
+import { IDataFetch, IProduct } from "../types/interface";
 
 const url = "http://localhost:8000";
 const endpoint = "/graphql";
 const query =
   "{ categories { id name __typename } products { id name instock gallery description brand __typename } }";
 
-export class Kids extends Component {
-  constructor(props) {
+interface IKidsPageProps {
+  cartState: RootState["cart"]["cart"];
+  incrementFn: (id: string, quantity: number) => void;
+  decrementFn: (id: string, quantity: number) => void;
+}
+
+interface IKidsPageState {
+  data: IDataFetch | null;
+  isLoading: boolean;
+  isError: boolean;
+}
+
+export class Kids extends Component<IKidsPageProps, IKidsPageState> {
+  constructor(props: IKidsPageProps) {
     super(props);
     this.state = {
       data: null,
@@ -41,7 +57,7 @@ export class Kids extends Component {
 
   render() {
     const { data, isLoading, isError } = this.state;
-    console.log("data", data?.data?.products);
+    const { cartState, incrementFn, decrementFn } = this.props;
 
     if (isLoading) {
       return <div>Loading...</div>;
@@ -57,8 +73,26 @@ export class Kids extends Component {
           Kids Clothing
         </h1>
         <div className="grid grid-cols-3 gap-5">
-          {data?.data?.products?.map((product) => (
-            <ProductCard name={product?.name} image={product?.gallery[0]} />
+          {data?.data?.products?.map((product: IProduct, index: number) => (
+            <ProductCard
+              key={index}
+              id={product?.id}
+              name={product?.name}
+              price={10}
+              image={product?.gallery[0]}
+              stock={1}
+              isSelected={
+                cartState.find((item) => product.id === item.id) ? true : false
+              }
+              addToCartFn={() => incrementFn(product.id, 1)}
+              removeFromCartFn={() =>
+                decrementFn(
+                  product.id,
+                  cartState.find((item) => product.id === item.id)?.quantity ||
+                    0,
+                )
+              }
+            />
           ))}
         </div>
       </div>
@@ -66,4 +100,25 @@ export class Kids extends Component {
   }
 }
 
-export default Kids;
+const reduxStateProps = (state: RootState) => ({
+  cartState: state.cart.cart,
+});
+
+const reduxDispatchProps = (dispatch: Dispatch) => ({
+  incrementFn: (id: string, quantity: number) =>
+    dispatch(
+      addItemToCart({
+        id,
+        quantity,
+      }),
+    ),
+  decrementFn: (id: string, quantity: number) =>
+    dispatch(
+      removeItemFromCart({
+        id,
+        quantity,
+      }),
+    ),
+});
+
+export default connect(reduxStateProps, reduxDispatchProps)(Kids);
