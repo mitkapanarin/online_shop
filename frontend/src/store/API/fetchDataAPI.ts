@@ -5,6 +5,9 @@ export const fetchDataAPI = createApi({
   reducerPath: "fetchDataAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
   }),
   tagTypes: ["products"],
   endpoints: (builder) => ({
