@@ -1,29 +1,30 @@
 import { Component } from "react";
-import ProductCard from "../components/Cards/ProductCard";
-import { addItemToCart, removeItemFromCart, RootState } from "../store";
-import { Dispatch } from "redux";
-import { connect } from "react-redux";
-import { IDataFetch, IProduct } from "../types/interface";
+import ProductCard from "../../components/Cards/ProductCard";
+import { IDataFetch, IProduct } from "../../types/interface";
+import { RootState } from "../../store";
 
 const url = "http://localhost:8000";
 const endpoint = "/graphql";
-const query =
-  "{ categories { id name __typename } products { id name instock gallery description brand __typename } }";
 
-interface IKidsPageProps {
+interface IProductPageProps {
   cartState: RootState["cart"]["cart"];
   incrementFn: (id: string, quantity: number) => void;
   decrementFn: (id: string, quantity: number) => void;
+  query: string;
+  title: string;
 }
 
-interface IKidsPageState {
+interface IProductPageState {
   data: IDataFetch | null;
   isLoading: boolean;
   isError: boolean;
 }
 
-export class Kids extends Component<IKidsPageProps, IKidsPageState> {
-  constructor(props: IKidsPageProps) {
+export class PageTemplate extends Component<
+  IProductPageProps,
+  IProductPageState
+> {
+  constructor(props: IProductPageProps) {
     super(props);
     this.state = {
       data: null,
@@ -38,7 +39,7 @@ export class Kids extends Component<IKidsPageProps, IKidsPageState> {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query: this.props.query }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -46,8 +47,11 @@ export class Kids extends Component<IKidsPageProps, IKidsPageState> {
         }
         return response.json();
       })
-      .then((data) => {
-        this.setState({ data, isLoading: false });
+      .then((result) => {
+        if (result.errors) {
+          throw new Error("Error in GraphQL query");
+        }
+        this.setState({ data: result, isLoading: false });
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -57,7 +61,8 @@ export class Kids extends Component<IKidsPageProps, IKidsPageState> {
 
   render() {
     const { data, isLoading, isError } = this.state;
-    const { cartState, incrementFn, decrementFn } = this.props;
+    const { cartState, incrementFn, decrementFn, title } = this.props;
+    console.log("data", data);
 
     if (isLoading) {
       return <div>Loading...</div>;
@@ -69,9 +74,7 @@ export class Kids extends Component<IKidsPageProps, IKidsPageState> {
 
     return (
       <div className="my-8">
-        <h1 className="text-center font-semibold text-3xl my-4">
-          Kids Clothing
-        </h1>
+        <h1 className="text-center font-semibold text-3xl my-4">{title}</h1>
         <div className="grid grid-cols-3 gap-5">
           {data?.data?.products?.map((product: IProduct, index: number) => (
             <ProductCard
@@ -81,9 +84,7 @@ export class Kids extends Component<IKidsPageProps, IKidsPageState> {
               price={10}
               image={product?.gallery[0]}
               stock={1}
-              isSelected={
-                cartState.find((item) => product.id === item.id) ? true : false
-              }
+              isSelected={!!cartState.find((item) => product.id === item.id)}
               addToCartFn={() => incrementFn(product.id, 1)}
               removeFromCartFn={() =>
                 decrementFn(
@@ -99,26 +100,3 @@ export class Kids extends Component<IKidsPageProps, IKidsPageState> {
     );
   }
 }
-
-const reduxStateProps = (state: RootState) => ({
-  cartState: state.cart.cart,
-});
-
-const reduxDispatchProps = (dispatch: Dispatch) => ({
-  incrementFn: (id: string, quantity: number) =>
-    dispatch(
-      addItemToCart({
-        id,
-        quantity,
-      }),
-    ),
-  decrementFn: (id: string, quantity: number) =>
-    dispatch(
-      removeItemFromCart({
-        id,
-        quantity,
-      }),
-    ),
-});
-
-export default connect(reduxStateProps, reduxDispatchProps)(Kids);

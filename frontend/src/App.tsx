@@ -4,7 +4,7 @@ import {
   RouteObject,
   RouterProvider,
 } from "react-router-dom";
-import { ErrorPage, Home, Kids, Men, Women } from "./Pages";
+import { ErrorPage, Home, Tech, Clothes } from "./Pages";
 import { GeneralPagesRoutes } from "./Pages/Logic";
 
 export class App extends Component {
@@ -18,16 +18,12 @@ export class App extends Component {
           element: <Home />,
         },
         {
-          path: "/women",
-          element: <Women />,
+          path: "/clothes",
+          element: <Clothes />,
         },
         {
-          path: "/men",
-          element: <Men />,
-        },
-        {
-          path: "/kids",
-          element: <Kids />,
+          path: "/tech",
+          element: <Tech />,
         },
         {
           path: "*",

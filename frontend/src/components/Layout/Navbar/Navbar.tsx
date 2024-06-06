@@ -48,30 +48,24 @@ export class Navbar extends Component<NavbarProps> {
         <div className={`flex justify-between items-center my-4`}>
           <div className="uppercase flex gap-6">
             <Link
-              to="/women"
-              data-testid={addDataTestIdFn("/women")}
-              className={pathDetector("/women")}
+              to="/clothes"
+              data-testid={addDataTestIdFn("/clothes")}
+              className={pathDetector("/clothes")}
             >
-              Women
+              Clothes
             </Link>
             <Link
-              to="/men"
-              data-testid={addDataTestIdFn("/men")}
-              className={pathDetector("/men")}
+              to="/tech"
+              data-testid={addDataTestIdFn("/tech")}
+              className={pathDetector("/tech")}
             >
-              men
-            </Link>
-            <Link
-              to="/kids"
-              data-testid={addDataTestIdFn("/kids")}
-              className={pathDetector("/kids")}
-            >
-              kids
+              Tech
             </Link>
           </div>
           <div className="">Logo</div>
           <button
             className=""
+            data-testid="cart-btn"
             onClick={() => changeCartModalState(!isModalActive)}
           >
             <HiOutlineShoppingCart className="cursor-pointer" />

@@ -1,7 +1,6 @@
 import Home from "./Home";
 import ErrorPage from "./ErrorPage";
-import Women from "./Women";
-import Men from "./Men";
-import Kids from "./Kids";
+import Tech from "./Tech";
+import Clothes from "./Clothes";
 
-export { ErrorPage, Home, Women, Men, Kids };
+export { ErrorPage, Home, Tech, Clothes };
