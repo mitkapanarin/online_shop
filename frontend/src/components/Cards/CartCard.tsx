@@ -28,9 +28,19 @@ export class CartCard extends Component<IProductCardProps & ICartCardProps> {
             <span>☑️☑️☑️☑️</span>
           </div>
           <div className="flex gap-6">
-            <button onClick={incrementFn}>+</button>
+            <button
+              data-testid="cart-item-amount-increase"
+              onClick={incrementFn}
+            >
+              +
+            </button>
             <span>{quantity}</span>
-            <button onClick={decrementFn}>-</button>
+            <button
+              data-testid="cart-item-amount-decrease"
+              onClick={decrementFn}
+            >
+              -
+            </button>
           </div>
         </div>
         <img
