@@ -1,7 +1,14 @@
 import { Component } from "react";
 import ProductCard from "../../components/Cards/ProductCard";
 import { IDataFetch, IProduct } from "../../types/interface";
-import { RootState } from "../../store";
+import { connect } from "react-redux";
+import {
+  addItemToCart,
+  removeItemFromCart,
+  resetCartItems,
+  RootState,
+} from "../../store";
+import { Dispatch } from "redux";
 
 const url = "http://localhost:8000";
 const endpoint = "/graphql";
@@ -62,7 +69,6 @@ export class PageTemplate extends Component<
   render() {
     const { data, isLoading, isError } = this.state;
     const { cartState, incrementFn, decrementFn, title } = this.props;
-    console.log("data", data);
 
     if (isLoading) {
       return <div>Loading...</div>;
@@ -100,3 +106,30 @@ export class PageTemplate extends Component<
     );
   }
 }
+
+const reduxStateProps = (state: RootState) => ({
+  cartState: state.cart.cart,
+});
+
+const reduxDispatchProps = (dispatch: Dispatch) => ({
+  incrementFn: (id: string, quantity: number) =>
+    dispatch(
+      addItemToCart({
+        id,
+        quantity,
+      }),
+    ),
+  decrementFn: (id: string, quantity: number) =>
+    dispatch(
+      removeItemFromCart({
+        id,
+        quantity,
+      }),
+    ),
+  resetCart: () => dispatch(resetCartItems()),
+});
+
+export const templateReduxConnector = connect(
+  reduxStateProps,
+  reduxDispatchProps,
+);

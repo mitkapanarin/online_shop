@@ -22,6 +22,7 @@ const withRouter = <P extends WithRouterProps>(
 
 interface NavbarProps extends WithRouterProps {
   isModalActive: boolean;
+  cart: RootState["cart"]["cart"];
   changeCartModalState: (isActive: boolean) => void;
 }
 
@@ -31,7 +32,7 @@ export class Navbar extends Component<NavbarProps> {
   }
 
   render() {
-    const { changeCartModalState, isModalActive, location } = this.props;
+    const { changeCartModalState, isModalActive, cart, location } = this.props;
     const currentPath = location.pathname;
     const pathDetector = (route: string) =>
       currentPath === route
@@ -69,6 +70,7 @@ export class Navbar extends Component<NavbarProps> {
             onClick={() => changeCartModalState(!isModalActive)}
           >
             <HiOutlineShoppingCart className="cursor-pointer" />
+            <span>{cart ? cart?.length : 0}</span>
           </button>
         </div>
         {isModalActive && <CartModal />}
@@ -79,6 +81,7 @@ export class Navbar extends Component<NavbarProps> {
 
 const reduxStateProps = (state: RootState) => ({
   isModalActive: state.cart.isCartModalActive,
+  cart: state.cart.cart,
 });
 
 const reduxDispatchProps = (dispatch: Dispatch) => ({

@@ -1,7 +1,6 @@
-import { connect } from "react-redux";
-import { addItemToCart, removeItemFromCart, RootState } from "../store";
-import { Dispatch } from "redux";
+import { RootState } from "../store";
 import { PageTemplate } from "./Template/PageTemplate";
+import { templateReduxConnector } from "./Template/PageTemplate";
 
 // only fetch the tech and not the clothes
 const techQuery =
@@ -13,25 +12,4 @@ const Tech = (props: {
   decrementFn: (id: string, quantity: number) => void;
 }) => <PageTemplate {...props} query={techQuery} title="Tech Section" />;
 
-const reduxStateProps = (state: RootState) => ({
-  cartState: state.cart.cart,
-});
-
-const reduxDispatchProps = (dispatch: Dispatch) => ({
-  incrementFn: (id: string, quantity: number) =>
-    dispatch(
-      addItemToCart({
-        id,
-        quantity,
-      }),
-    ),
-  decrementFn: (id: string, quantity: number) =>
-    dispatch(
-      removeItemFromCart({
-        id,
-        quantity,
-      }),
-    ),
-});
-
-export default connect(reduxStateProps, reduxDispatchProps)(Tech);
+export default templateReduxConnector(Tech);

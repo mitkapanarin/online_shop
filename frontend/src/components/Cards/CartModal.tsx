@@ -1,14 +1,13 @@
 import { Component } from "react";
 import CartCard from "./CartCard";
-import { connect } from "react-redux";
-import {
-  RootState,
-  addItemToCart,
-  removeItemFromCart,
-  resetCartItems,
-} from "../../store";
-import { data } from "../../Data/data";
-import { Dispatch } from "redux";
+import { RootState } from "../../store";
+import { IDataFetch } from "../../types/interface";
+import { templateReduxConnector } from "../../Pages/Template/PageTemplate";
+
+const url = "http://localhost:8000";
+const endpoint = "/graphql";
+const allProductsQuery =
+  "{ categories { id name __typename } products { id name instock gallery description brand __typename } }";
 
 export interface ICartModalProps {
   cartState: RootState["cart"]["cart"];
@@ -17,12 +16,61 @@ export interface ICartModalProps {
   resetCart: () => void;
 }
 
-export class CartModal extends Component<ICartModalProps> {
+interface IProductPageState {
+  data: IDataFetch | null;
+  isLoading: boolean;
+  isError: boolean;
+}
+
+export class CartModal extends Component<ICartModalProps, IProductPageState> {
   constructor(props: ICartModalProps) {
     super(props);
+    this.state = {
+      data: null,
+      isLoading: false,
+      isError: false,
+    };
   }
+
+  componentDidMount() {
+    fetch(url + endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify({ query: allProductsQuery }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((result) => {
+        if (result.errors) {
+          throw new Error("Error in GraphQL query");
+        }
+        this.setState({ data: result, isLoading: false });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        this.setState({ isError: true, isLoading: false });
+      });
+  }
+
   render() {
     const { cartState, incrementFn, decrementFn, resetCart } = this.props;
+
+    const { data, isLoading, isError } = this.state;
+
+    if (isLoading) {
+      return <h3>Cart Data Loading...</h3>;
+    }
+
+    if (isError) {
+      return <h3>Error fetching cart data</h3>;
+    }
+
     return (
       <div className="absolute right-0 t-0 p-3 min-h-[300px] w-[300px] z-10 bg-white">
         <div className="flex flex-col gap-3">
@@ -30,7 +78,7 @@ export class CartModal extends Component<ICartModalProps> {
             <h3 className="text-center">Cart is empty</h3>
           )}
           {cartState?.map((item) => {
-            const product = data.find((p) => p.id === item.id);
+            const product = data?.data?.products?.find((p) => p.id === item.id);
             if (!product) {
               return;
             }
@@ -38,43 +86,28 @@ export class CartModal extends Component<ICartModalProps> {
               <CartCard
                 key={item.id}
                 {...product}
+                image={product.gallery[0]}
                 quantity={item.quantity}
+                // add stocks and price later on api then update here
+                price={10}
+                stock={1}
                 incrementFn={() => incrementFn(item.id, 1)}
                 decrementFn={() => decrementFn(item.id, 1)}
               />
             );
           })}
         </div>
-        <div className="flex flex-row justify-center mb-1 mt-3">
-          <button className="" onClick={resetCart}>
+        {cartState.length > 0 && (
+          <button
+            className="bg-emerald-400 px-4 py-1 rounded-md w-full my-3"
+            onClick={resetCart}
+          >
             Reset Cart
           </button>
-        </div>
+        )}
       </div>
     );
   }
 }
 
-const reduxStateProps = (state: RootState) => ({
-  cartState: state.cart.cart,
-});
-
-const reduxDispatchProps = (dispatch: Dispatch) => ({
-  incrementFn: (id: string, quantity: number) =>
-    dispatch(
-      addItemToCart({
-        id,
-        quantity,
-      }),
-    ),
-  decrementFn: (id: string, quantity: number) =>
-    dispatch(
-      removeItemFromCart({
-        id,
-        quantity,
-      }),
-    ),
-  resetCart: () => dispatch(resetCartItems()),
-});
-
-export default connect(reduxStateProps, reduxDispatchProps)(CartModal);
+export default templateReduxConnector(CartModal);
