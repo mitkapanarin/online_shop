@@ -2,6 +2,7 @@ import { Component } from "react";
 import { IProductCardProps, IProductOnCartStats } from "../../types/interface";
 import { MdAddShoppingCart } from "react-icons/md";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export class ProductCard extends Component<
   IProductCardProps & IProductOnCartStats,
@@ -27,6 +28,7 @@ export class ProductCard extends Component<
       image,
       name,
       price,
+      currency,
       stock,
       id,
       isSelected,
@@ -36,7 +38,8 @@ export class ProductCard extends Component<
     const { isHovered } = this.state;
 
     return (
-      <div
+      <Link
+        to={`/products/${id}`}
         className="capitalize"
         id={id}
         onMouseEnter={this.handleMouseEnter}
@@ -44,39 +47,54 @@ export class ProductCard extends Component<
       >
         <div className="relative">
           <img
-            src={image}
+            src={image ? image : "/no-image.png"}
             alt={name}
-            className={`w-full h-72 object-cover ${stock === 0 ? "filter brightness-50" : ""}`}
+            className={`w-full h-72 object-cover ${stock === false ? "filter brightness-50" : ""}`}
           />
-          {stock === 0 && (
+          {stock === false && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-xl font-light">
               Out of Stock
             </div>
           )}
-          {isHovered && isSelected == false && stock > 0 && (
+          {isHovered && isSelected == false && stock == true && (
             <button
               type="button"
               className="cursor-pointer absolute bottom-[-20px] right-4 bg-green-400 p-3 rounded-full shadow-lg"
-              onClick={addToCartFn}
+              onClick={(e) => {
+                // make sure that the event does not bubble up to the parent
+                e.preventDefault();
+                e.stopPropagation();
+                addToCartFn();
+              }}
             >
               <MdAddShoppingCart className="text-2xl text-white" />
             </button>
           )}
 
-          {isHovered && isSelected == true && stock > 0 && (
+          {isHovered && isSelected == true && stock == true && (
             <button
               type="button"
               className="cursor-pointer absolute bottom-[-20px] right-4 bg-green-400 p-3 rounded-full shadow-lg"
-              onClick={removeFromCartFn}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                removeFromCartFn();
+              }}
             >
               <MdOutlineRemoveShoppingCart className="text-2xl text-white" />
             </button>
           )}
         </div>
         <h3 className="text-lg font-semibold mt-4">{name}</h3>
-        <h6 className="text-md font-medium text-gray-700">$ {price}</h6>
-        <p className="text-sm text-gray-600">stock: {stock}</p>
-      </div>
+        <h6 className="text-md font-medium text-gray-700">
+          {currency} {price}
+        </h6>
+        <p
+          className={`text-sm ${stock ? "text-gray-600" : "text-red-600"} font-semibold`}
+        >
+          {stock ? "In Stock" : "Out of Stock"}
+        </p>
+      </Link>
     );
   }
 }

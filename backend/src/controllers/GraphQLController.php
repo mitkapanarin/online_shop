@@ -64,10 +64,44 @@ class GraphQLController
                 'name' => ['type' => Type::string()],
                 'instock' => ['type' => Type::boolean()],
                 'gallery' => ['type' => Type::listOf(Type::string())],
+                'prices' => ['type' => Type::listOf(new ObjectType([
+                  'name' => 'Price',
+                  'fields' => [
+                    'amount' => ['type' => Type::float()],
+                    'currency' => [
+                      'type' => new ObjectType([
+                        'name' => 'Currency',
+                        'fields' => [
+                          'label' => ['type' => Type::string()],
+                          'symbol' => ['type' => Type::string()],
+                          '__typename' => ['type' => Type::string()]
+                        ]
+                      ])
+                    ],
+                    '__typename' => ['type' => Type::string()],
+                  ]
+                ]))],
+                'attributes' => ['type' => Type::listOf(new ObjectType([
+                  'name' => 'Attribute',
+                  'fields' => [
+                    'id' => ['type' => Type::string()],
+                    'name' => ['type' => Type::string()],
+                    'type' => ['type' => Type::string()],
+                    '__typename' => ['type' => Type::string()],
+                    'items' => ['type' => Type::listOf(new ObjectType([
+                      'name' => 'AttributeItem',
+                      'fields' => [
+                        'displayValue' => ['type' => Type::string()],
+                        'value' => ['type' => Type::string()],
+                        'id' => ['type' => Type::string()],
+                        '__typename' => ['type' => Type::string()]
+                      ]
+                    ]))]
+                  ]
+                ]))],
                 'description' => ['type' => Type::string()],
                 'brand' => ['type' => Type::string()],
                 '__typename' => ['type' => Type::string()],
-                // Add more fields as needed
               ]
             ])),
             'resolve' => function () {
@@ -88,12 +122,44 @@ class GraphQLController
               if ($result->num_rows > 0) {
                 // Output data of each row
                 while ($row = $result->fetch_assoc()) {
+                  // Parse JSON fields from the database
+                  $gallery = json_decode($row["gallery"]);
+                  $prices = json_decode($row["prices"]);
+                  $attributes = json_decode($row["attributes"]);
+
                   // Create product object
                   $product = [
                     'id' => $row["id"],
                     'name' => $row["name"],
                     'instock' => (bool)$row["instock"],
-                    'gallery' => json_decode($row["gallery"]),
+                    'gallery' => $gallery,
+                    'prices' => array_map(function ($price) {
+                      return [
+                        'amount' => $price->amount,
+                        'currency' => [
+                          'label' => $price->currency->label,
+                          'symbol' => $price->currency->symbol,
+                          '__typename' => $price->currency->__typename
+                        ],
+                        '__typename' => $price->__typename
+                      ];
+                    }, $prices),
+                    'attributes' => array_map(function ($attribute) {
+                      return [
+                        'id' => $attribute->id,
+                        'name' => $attribute->name,
+                        'type' => $attribute->type,
+                        '__typename' => $attribute->__typename,
+                        'items' => array_map(function ($item) {
+                          return [
+                            'displayValue' => $item->displayValue,
+                            'value' => $item->value,
+                            'id' => $item->id,
+                            '__typename' => $item->__typename
+                          ];
+                        }, $attribute->items)
+                      ];
+                    }, $attributes),
                     'description' => $row["description"],
                     'brand' => $row["brand"],
                     '__typename' => 'Product'

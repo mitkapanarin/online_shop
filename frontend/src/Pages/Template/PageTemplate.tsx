@@ -78,18 +78,21 @@ export class PageTemplate extends Component<
       return <div>Error fetching data</div>;
     }
 
+    console.log(data?.data?.products);
+
     return (
       <div className="my-8">
         <h1 className="text-center font-semibold text-3xl my-4">{title}</h1>
         <div className="grid grid-cols-3 gap-5">
           {data?.data?.products?.map((product: IProduct, index: number) => (
             <ProductCard
+              currency={product?.prices[0].currency.symbol}
               key={index}
               id={product?.id}
               name={product?.name}
-              price={10}
+              price={product?.prices[0].amount}
               image={product?.gallery[0]}
-              stock={1}
+              stock={product?.instock}
               isSelected={!!cartState.find((item) => product.id === item.id)}
               addToCartFn={() => incrementFn(product.id, 1)}
               removeFromCartFn={() =>

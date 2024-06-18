@@ -10,7 +10,8 @@ export interface IProductCardProps {
   image: string;
   name: string;
   price: number;
-  stock: number;
+  stock: boolean;
+  currency: string;
 }
 
 export interface ICartItem {
@@ -51,7 +52,7 @@ export interface IPrice {
 export interface IProduct {
   id: string;
   name: string;
-  inStock: boolean;
+  instock: boolean;
   gallery: string[];
   description: string;
   category: string;

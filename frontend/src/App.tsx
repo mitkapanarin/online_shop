@@ -4,7 +4,14 @@ import {
   RouteObject,
   RouterProvider,
 } from "react-router-dom";
-import { ErrorPage, Home, Tech, Clothes } from "./Pages";
+import {
+  ErrorPage,
+  Home,
+  Tech,
+  Clothes,
+  ProductDetails,
+  Products,
+} from "./Pages";
 import { GeneralPagesRoutes } from "./Pages/Logic";
 
 export class App extends Component {
@@ -20,6 +27,14 @@ export class App extends Component {
         {
           path: "/clothes",
           element: <Clothes />,
+        },
+        {
+          path: "/products",
+          element: <Products />,
+        },
+        {
+          path: "/products/:id",
+          element: <ProductDetails />,
         },
         {
           path: "/tech",
