@@ -4,7 +4,7 @@ import { templateReduxConnector } from "./Template/PageTemplate";
 
 // only fetch the tech and not the clothes
 const techQuery =
-  "{ categories { id name __typename } products { id name instock gallery prices { amount __typename currency { label symbol __typename } } description brand __typename } }";
+  "{ categories { id name __typename } products { id attributes { id name items { id displayValue value __typename } type __typename } name instock gallery prices { amount __typename currency { label symbol __typename } } description brand __typename } }";
 
 const Clothes = (props: {
   cartState: RootState["cart"]["cart"];

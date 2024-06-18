@@ -88,9 +88,9 @@ export class CartModal extends Component<ICartModalProps, IProductPageState> {
                 {...product}
                 image={product.gallery[0]}
                 quantity={item.quantity}
-                // add stocks and price later on api then update here
                 price={10}
-                stock={1}
+                stock={product?.instock}
+                currency={"$"}
                 incrementFn={() => incrementFn(item.id, 1)}
                 decrementFn={() => decrementFn(item.id, 1)}
               />

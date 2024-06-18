@@ -78,6 +78,9 @@ class ProductDetails extends Component<
 
   render() {
     const { isLoading, isError, data, id } = this.state;
+    const { cartState } = this.props;
+
+    console.log("cartState:", cartState);
 
     if (isLoading) {
       return <div>Loading...</div>;
@@ -101,6 +104,7 @@ class ProductDetails extends Component<
               {product.gallery?.length !== 1 &&
                 product.gallery?.map((_, index) => (
                   <img
+                    key={index}
                     className="cursor-pointer"
                     src={product.gallery[index + 1] || "/no-image.png"}
                     alt={`product gallery image ${index}`}
@@ -116,15 +120,46 @@ class ProductDetails extends Component<
         </div>
         <div className="right">
           <h1 className="text-3xl font-semibold">{product.name}</h1>
+          <div className="my-5">
+            {(cartState.find((item) => item.id === product.id)
+              ?.quantity as number) > 0 ? (
+              <div className="flex flex-col gap-3 justify-center items-center">
+                <div className="flex gap-6 text-2xl">
+                  <button
+                    data-testid="cart-item-amount-increase"
+                    onClick={() => this.props.incrementFn(product.id, 1)}
+                  >
+                    +
+                  </button>
+                  <span>
+                    {cartState.find((item) => item.id === product.id)?.quantity}
+                  </span>
+                  <button
+                    data-testid="cart-item-amount-decrease"
+                    onClick={() => this.props.decrementFn(product.id, 1)}
+                  >
+                    -
+                  </button>
+                </div>
+                <button
+                  className="bg-red-600 text-gray-100 px-6 py-2"
+                  onClick={() => this.props.decrementFn(product.id, 1)}
+                >
+                  Remove from Cart
+                </button>
+              </div>
+            ) : product?.instock == false ? (
+              <h1 className="text-xl text-center text-red-500">Out of stock</h1>
+            ) : (
+              <button
+                className="bg-[#5ECE7B] text-gray-100 px-6 py-2"
+                onClick={() => this.props.incrementFn(product.id, 1)}
+              >
+                Add to Cart
+              </button>
+            )}
+          </div>
           <p>{ReactHtmlParser(product.description)}</p>
-          {/* Add more product details as needed */}
-          <button onClick={() => this.props.incrementFn(product.id, 1)}>
-            Add to Cart
-          </button>
-          <button onClick={() => this.props.decrementFn(product.id, 1)}>
-            Remove from Cart
-          </button>
-          <button onClick={() => this.props.resetCart()}>Reset Cart</button>
         </div>
       </div>
     );

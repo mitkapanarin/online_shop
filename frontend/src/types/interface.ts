@@ -17,6 +17,9 @@ export interface IProductCardProps {
 export interface ICartItem {
   id: string;
   quantity: number;
+  attributes?: {
+    [key: string]: string;
+  };
 }
 
 export interface ICategory {
