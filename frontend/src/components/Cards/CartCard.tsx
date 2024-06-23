@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { IProductCardProps } from "../../types/interface";
 import { textLimiter } from "../Text/textFn";
+import Variants from "../RadioOptions/Variants";
 
 interface ICartCardProps {
   quantity: number;
@@ -23,10 +24,10 @@ export class CartCard extends Component<IProductCardProps & ICartCardProps> {
             {textLimiter(name, 18)}
           </h3>
           <p className="font-semibold">$ {price}</p>
-          <div className="flex flex-col gap-1">
-            <span>☑️☑️☑️☑️</span>
-            <span>☑️☑️☑️☑️</span>
-          </div>
+          <Variants
+            attributes={this.props.attributes}
+            className="scale-[0.8] transform"
+          />
           <div className="flex gap-6">
             <button
               data-testid="cart-item-amount-increase"

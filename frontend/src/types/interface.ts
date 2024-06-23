@@ -12,6 +12,7 @@ export interface IProductCardProps {
   price: number;
   stock: boolean;
   currency: string;
+  attributes: IAttribute[];
 }
 
 export interface ICartItem {

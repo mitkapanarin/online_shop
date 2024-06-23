@@ -7,7 +7,7 @@ import { templateReduxConnector } from "../../Pages/Template/PageTemplate";
 const url = "http://localhost:8000";
 const endpoint = "/graphql";
 const allProductsQuery =
-  "{ categories { id name __typename } products { id name instock gallery description brand __typename } }";
+  "{ products { id name instock attributes { id name items { id displayValue value __typename } type __typename } gallery description brand prices { amount __typename currency { label symbol __typename } } } }";
 
 export interface ICartModalProps {
   cartState: RootState["cart"]["cart"];
@@ -88,9 +88,10 @@ export class CartModal extends Component<ICartModalProps, IProductPageState> {
                 {...product}
                 image={product.gallery[0]}
                 quantity={item.quantity}
-                price={10}
+                price={product?.prices[0]?.amount || 0}
                 stock={product?.instock}
-                currency={"$"}
+                attributes={product?.attributes}
+                currency={product?.prices[0]?.currency?.symbol || "$"}
                 incrementFn={() => incrementFn(item.id, 1)}
                 decrementFn={() => decrementFn(item.id, 1)}
               />

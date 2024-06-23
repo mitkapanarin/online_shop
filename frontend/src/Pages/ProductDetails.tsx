@@ -9,6 +9,7 @@ import {
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import ReactHtmlParser from "react-html-parser";
+import Variants from "../components/RadioOptions/Variants";
 
 interface IProductDetailsProps {
   cartState: RootState["cart"]["cart"];
@@ -55,7 +56,8 @@ class ProductDetails extends Component<
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: JSON.stringify({
-        query: "{ products { id name instock gallery description brand } }",
+        query:
+          "{ products { id name instock attributes { id name items { id displayValue value __typename } type __typename } gallery description brand prices { amount __typename currency { label symbol __typename } } } }",
       }),
     })
       .then((response) => {
@@ -120,6 +122,12 @@ class ProductDetails extends Component<
         </div>
         <div className="right">
           <h1 className="text-3xl font-semibold">{product.name}</h1>
+          {product?.instock && <Variants attributes={product.attributes} />}
+
+          <h1 className="text-3xl font-semibold">
+            {product.prices[0].currency.symbol}
+            {product.prices[0].amount}
+          </h1>
           <div className="my-5">
             {(cartState.find((item) => item.id === product.id)
               ?.quantity as number) > 0 ? (
