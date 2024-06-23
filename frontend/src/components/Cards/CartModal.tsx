@@ -3,6 +3,7 @@ import CartCard from "./CartCard";
 import { RootState } from "../../store";
 import { IDataFetch } from "../../types/interface";
 import { templateReduxConnector } from "../../Pages/Template/PageTemplate";
+import { toKebabCase } from "../../CONSTANTS/Constants";
 
 const url = "http://localhost:8000";
 const endpoint = "/graphql";
@@ -72,7 +73,10 @@ export class CartModal extends Component<ICartModalProps, IProductPageState> {
     }
 
     return (
-      <div className="absolute right-0 t-0 p-3 min-h-[300px] w-[300px] z-10 bg-white">
+      <div
+        data-testid="cart-total"
+        className="absolute right-0 t-0 p-3 min-h-[300px] w-[300px] z-10 bg-white"
+      >
         <div className="flex flex-col gap-3">
           {cartState.length === 0 && (
             <h3 className="text-center">Cart is empty</h3>
@@ -83,28 +87,49 @@ export class CartModal extends Component<ICartModalProps, IProductPageState> {
               return;
             }
             return (
-              <CartCard
-                key={item.id}
-                {...product}
-                image={product.gallery[0]}
-                quantity={item.quantity}
-                price={product?.prices[0]?.amount || 0}
-                stock={product?.instock}
-                attributes={product?.attributes}
-                currency={product?.prices[0]?.currency?.symbol || "$"}
-                incrementFn={() => incrementFn(item.id, 1)}
-                decrementFn={() => decrementFn(item.id, 1)}
-              />
+              <div
+                data-testid={`cart-item-attribute-${toKebabCase(product.name)}-selected`}
+              >
+                <CartCard
+                  key={item.id}
+                  {...product}
+                  image={product.gallery[0]}
+                  quantity={item.quantity}
+                  price={product?.prices[0]?.amount || 0}
+                  stock={product?.instock}
+                  attributes={product?.attributes}
+                  currency={product?.prices[0]?.currency?.symbol || "$"}
+                  incrementFn={() => incrementFn(item.id, 1)}
+                  decrementFn={() => decrementFn(item.id, 1)}
+                />
+              </div>
             );
           })}
         </div>
         {cartState.length > 0 && (
-          <button
-            className="bg-emerald-400 px-4 py-1 rounded-md w-full my-3"
-            onClick={resetCart}
-          >
-            Reset Cart
-          </button>
+          <>
+            <div
+              className="text-lg font-semibold text-center"
+              data-testid="cart-item-amount"
+            >
+              Total ${""}
+              {cartState.reduce((acc, item) => {
+                const product = data?.data?.products?.find(
+                  (p) => p.id === item.id,
+                );
+                if (!product) {
+                  return acc;
+                }
+                return acc + product.prices[0].amount * item.quantity;
+              }, 0)}
+            </div>
+            <button
+              className="bg-emerald-400 px-4 py-1 rounded-md w-full my-3"
+              onClick={resetCart}
+            >
+              Reset Cart
+            </button>
+          </>
         )}
       </div>
     );

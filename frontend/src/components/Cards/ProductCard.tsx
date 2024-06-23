@@ -3,6 +3,7 @@ import { IProductCardProps, IProductOnCartStats } from "../../types/interface";
 import { MdAddShoppingCart } from "react-icons/md";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { toKebabCase } from "../../CONSTANTS/Constants";
 
 export class ProductCard extends Component<
   IProductCardProps & IProductOnCartStats,
@@ -42,6 +43,7 @@ export class ProductCard extends Component<
         to={`/products/${id}`}
         className="capitalize"
         id={id}
+        data-testid={`product-${toKebabCase(name)}`}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >

@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { IAttribute } from "../../types/interface";
+import { toKebabCase } from "../../CONSTANTS/Constants";
 
 interface VariantsProps {
   className?: string;
@@ -38,12 +39,17 @@ export class Variants extends Component<VariantsProps, VariantsState> {
     return (
       <div className={className}>
         {attributes.map((attribute) => (
-          <div key={attribute.name} className="mb-4">
+          <div
+            data-testid={`product-attribute-${toKebabCase(attribute.name)}`}
+            key={attribute.name}
+            className="mb-4"
+          >
             <h3 className="text-xl font-semibold">{attribute.name}</h3>
             <div className="flex gap-2 flex-wrap">
               {attribute.items.map((item) => (
                 <div
                   key={item.value}
+                  data-testid={`cart-item-attribute-${toKebabCase(attribute.name)}-${toKebabCase(item.value)}`}
                   className={`px-2 py-1 border-2 cursor-pointer ${
                     selectedOptions[attribute.name] === item.value
                       ? "bg-black text-white"

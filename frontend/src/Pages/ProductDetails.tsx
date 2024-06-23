@@ -101,7 +101,10 @@ class ProductDetails extends Component<
     return (
       <div className="grid grid-cols-2">
         <div className="left">
-          <div className="grid grid-cols-12 gap-3">
+          <div
+            data-testid="product-gallery"
+            className="grid grid-cols-12 gap-3"
+          >
             <div className="col-span-2 flex flex-col gap-3">
               {product.gallery?.length !== 1 &&
                 product.gallery?.map((_, index) => (
@@ -162,12 +165,15 @@ class ProductDetails extends Component<
               <button
                 className="bg-[#5ECE7B] text-gray-100 px-6 py-2"
                 onClick={() => this.props.incrementFn(product.id, 1)}
+                data-testid="add-to-cart"
               >
                 Add to Cart
               </button>
             )}
           </div>
-          <p>{ReactHtmlParser(product.description)}</p>
+          <p data-testid="product-description">
+            {ReactHtmlParser(product.description)}
+          </p>
         </div>
       </div>
     );
