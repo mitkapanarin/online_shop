@@ -92,6 +92,7 @@ export class PageTemplate extends Component<
               name={product?.name}
               price={product?.prices[0].amount}
               image={product?.gallery[0]}
+              attributes={product?.attributes}
               stock={product?.instock}
               isSelected={!!cartState.find((item) => product.id === item.id)}
               addToCartFn={() => incrementFn(product.id, 1)}
