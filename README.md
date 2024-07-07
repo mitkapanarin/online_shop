@@ -1,17 +1,21 @@
 # Project Description: eCommerce Website
+
 This project showcases my skills in full stack development, handling dynamic data, and designing user interfaces.
 
 ## Backend:
+
 PHP
 MySQL
 GraphQL
 OOP design
 
 ## Frontend:
+
 ReactJS (class components)
 Figma designs
 
 ## Features:
+
 Single Page Application (SPA)
 Dynamic data fetched via GraphQL
 Cart overlay with item count and order functionality
