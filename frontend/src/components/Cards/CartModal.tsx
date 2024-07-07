@@ -5,7 +5,7 @@ import { IDataFetch } from "../../types/interface";
 import { templateReduxConnector } from "../../Pages/Template/PageTemplate";
 import { toKebabCase } from "../../CONSTANTS/Constants";
 
-const url = "http://localhost:8000";
+const url = "https://b677-107-21-67-105.ngrok-free.app/";
 const endpoint = "/graphql";
 const allProductsQuery =
   "{ products { id name instock attributes { id name items { id displayValue value __typename } type __typename } gallery description brand prices { amount __typename currency { label symbol __typename } } } }";

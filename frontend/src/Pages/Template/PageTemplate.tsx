@@ -10,7 +10,7 @@ import {
 } from "../../store";
 import { Dispatch } from "redux";
 
-const url = "http://localhost:8000";
+const url = "https://b677-107-21-67-105.ngrok-free.app/";
 const endpoint = "/graphql";
 
 interface IProductPageProps {
