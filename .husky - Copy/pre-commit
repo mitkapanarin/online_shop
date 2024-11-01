@@ -1,4 +1,0 @@
-npm run root-format-and-lint
-
-# for testing pre-commit hooks, uncomment the line below
-# exit 1 
