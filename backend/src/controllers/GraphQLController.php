@@ -26,8 +26,7 @@ class GraphQLController
             'resolve' => function () {
               // Modify this resolver function to fetch categories from the database
               // Connect to your MySQL database
-              $mysqli = new mysqli("database-1.cl0iwuu6eot6.us-east-1.rds.amazonaws.com", "jahangir_user_db", "34H*qd#vG15WbRQPnw8rv3LSL5!CD", "shop_database");
-
+              $mysqli = new mysqli("3.239.119.81:3306", "root", "eDgK6EDreqkW0ZFs4kNTra69S651L1YMFrO5ORhKWJxUB2OvqHoS9xivmKv1cWrp", "shop_database");
               // Check connection
               if ($mysqli->connect_error) {
                 die("Connection failed: " . $mysqli->connect_error);
@@ -107,8 +106,7 @@ class GraphQLController
             'resolve' => function () {
               // Modify this resolver function to fetch products from the database
               // Connect to your MySQL database
-              $mysqli = new mysqli("database-1.cl0iwuu6eot6.us-east-1.rds.amazonaws.com", "jahangir_user_db", "34H*qd#vG15WbRQPnw8rv3LSL5!CD", "shop_database");
-
+              $mysqli = new mysqli("3.239.119.81:3306", "root", "eDgK6EDreqkW0ZFs4kNTra69S651L1YMFrO5ORhKWJxUB2OvqHoS9xivmKv1cWrp", "shop_database");
               // Check connection
               if ($mysqli->connect_error) {
                 die("Connection failed: " . $mysqli->connect_error);
