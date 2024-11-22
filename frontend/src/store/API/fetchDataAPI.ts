@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const fetchDataAPI = createApi({
   reducerPath: "fetchDataAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://b677-107-21-67-105.ngrok-free.app",
+    baseUrl: "http://localhost:8000",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
