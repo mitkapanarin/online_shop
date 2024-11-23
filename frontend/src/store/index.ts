@@ -2,16 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import {
-  cartSlice,
-  addItemToCart,
-  removeItemFromCart,
-  resetCart,
-  resetCartItems,
-  resetCartState,
-  changeCartModalState,
-} from "./Slices/cartSlice";
-import { fetchDataAPI, useGetAllProductsMutation } from "./API/fetchDataAPI";
+import { cartSlice } from "./Slices";
+import { fetchDataAPI } from "./API";
 
 const persistConfig = {
   key: "root",
@@ -40,14 +32,5 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export type AppStore = typeof store;
 
-export {
-  addItemToCart,
-  removeItemFromCart,
-  resetCart,
-  resetCartItems,
-  resetCartState,
-  changeCartModalState,
-
-  // fetchDataAPI
-  useGetAllProductsMutation,
-};
+export * from "./Slices";
+export * from "./API";

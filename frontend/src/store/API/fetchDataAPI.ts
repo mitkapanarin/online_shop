@@ -11,7 +11,7 @@ export const fetchDataAPI = createApi({
   }),
   tagTypes: ["products"],
   endpoints: (builder) => ({
-    getAllProducts: builder.mutation<any, void>({
+    getAllProducts: builder.query<any, void>({
       query: () => ({
         url: "/graphql",
         method: "POST",
@@ -20,9 +20,9 @@ export const fetchDataAPI = createApi({
             "{ categories { id name __typename } products { id name instock gallery description brand __typename } }",
         },
       }),
-      invalidatesTags: ["products"],
+      providesTags: ["products"],
     }),
   }),
 });
 
-export const { useGetAllProductsMutation } = fetchDataAPI;
+export const { useGetAllProductsQuery } = fetchDataAPI;

@@ -1,3 +1,7 @@
+import { useGetAllProductsQuery } from "../store";
+
 export const Home = () => {
-  return <div>Home</div>;
+  const { data } = useGetAllProductsQuery();
+  console.log(data);
+  return <div>Home Page</div>;
 };
