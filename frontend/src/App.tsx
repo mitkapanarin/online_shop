@@ -1,7 +1,13 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Error, Home } from "./Pages";
+
 export const App = () => {
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
