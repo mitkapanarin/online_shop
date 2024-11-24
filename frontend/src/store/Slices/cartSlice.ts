@@ -4,12 +4,10 @@ import { ICartItem } from "../../_Types";
 
 interface ICartSliceStateProps {
   cart: ICartItem[];
-  isCartModalActive: boolean;
 }
 
 const initialState: ICartSliceStateProps = {
   cart: [],
-  isCartModalActive: false,
 };
 
 export const cartSlice = createSlice({
@@ -49,37 +47,9 @@ export const cartSlice = createSlice({
         }
       }
     },
-
-    changeCartModalState: (
-      state: ICartSliceStateProps,
-      action: PayloadAction<boolean>,
-    ) => {
-      return {
-        cart: state.cart,
-        isCartModalActive: action.payload,
-      };
-    },
-    resetCartItems: (state: ICartSliceStateProps) => {
-      return {
-        cart: [],
-        isCartModalActive: state.isCartModalActive,
-      };
-    },
-    resetCartState: (state: ICartSliceStateProps) => {
-      return {
-        cart: state.cart,
-        isCartModalActive: initialState.isCartModalActive,
-      };
-    },
     resetCart: () => initialState,
   },
 });
 
-export const {
-  addItemToCart,
-  resetCart,
-  removeItemFromCart,
-  resetCartItems,
-  resetCartState,
-  changeCartModalState,
-} = cartSlice.actions;
+export const { addItemToCart, resetCart, removeItemFromCart } =
+  cartSlice.actions;
