@@ -16,7 +16,9 @@ export const ProductCard = ({
   addToCartFn,
   removeFromCartFn,
 }: ProductCardProps) => {
-  const isSelected = useSelector((state: RootState) => state.cart);
+  const isSelected = useSelector((state: RootState) =>
+    state.cart.cart.find((item) => item.id === id),
+  );
 
   const [isHovered, setIsHovered] = useState(false);
   const UsdPricing = prices.find((price) => price.currency.label === "USD");
@@ -36,7 +38,7 @@ export const ProductCard = ({
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          onClickFn();
+          onClickFn({ id, quantity: 1 });
         }}
       >
         <ButtonIcon className="text-2xl text-white" />

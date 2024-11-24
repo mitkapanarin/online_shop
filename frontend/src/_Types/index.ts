@@ -82,6 +82,6 @@ export interface IDataFetch {
 }
 
 export interface ProductCardProps extends IProduct {
-  addToCartFn: () => void;
-  removeFromCartFn: () => void;
+  addToCartFn: (item: ICartItem) => void;
+  removeFromCartFn: (item: ICartItem) => void;
 }
