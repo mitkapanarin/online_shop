@@ -1,7 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ICartItem, IProduct } from "../../_Types";
 import { mockData } from "../../components/MockData";
-import { addItemToCart, removeItemFromCart } from "../../store";
+import {
+  addItemToCart,
+  removeItemFromCart,
+  RootState,
+  resetCart,
+} from "../../store";
 
 // Define types
 type Constants = {
@@ -11,6 +16,8 @@ type Constants = {
   isError: boolean;
   addToCartFn: (item: ICartItem) => void;
   removeFromCartFn: (item: ICartItem) => void;
+  state: RootState;
+  resetCart: () => void;
 };
 
 export const useDataHOC = <P extends object>(
@@ -18,6 +25,8 @@ export const useDataHOC = <P extends object>(
 ) => {
   return (props: P) => {
     const dispatch = useDispatch();
+
+    const state = useSelector((state: RootState) => state);
 
     const addToCartFn = (item: ICartItem) => dispatch(addItemToCart(item));
     const removeFromCartFn = (item: ICartItem) =>
@@ -30,6 +39,8 @@ export const useDataHOC = <P extends object>(
       isError: false,
       addToCartFn,
       removeFromCartFn,
+      state,
+      resetCart,
     };
 
     return <WrappedComponent {...props} {...constants} />;
