@@ -12,17 +12,6 @@ export interface IProductOnCartStats {
   removeFromCartFn: () => void;
 }
 
-// remove/ update this to new type from scandiweb schema docs
-export interface IProductCardProps {
-  id: string;
-  image: string;
-  name: string;
-  price: number;
-  stock: boolean;
-  currency: string;
-  attributes: IAttribute[];
-}
-
 export interface ICartItem {
   id: string;
   quantity: number;
