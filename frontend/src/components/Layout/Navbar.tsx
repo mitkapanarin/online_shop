@@ -24,35 +24,48 @@ export const Navbar: React.FC = () => {
   const [modalState, setModalState] = React.useState<boolean>(false);
 
   return (
-    <div className={`relative ${containerSettings}`}>
-      <div className={`flex justify-between items-center my-4`}>
-        <div className="uppercase flex gap-6">
-          <Link
-            to="/clothes"
-            data-testid={addDataTestIdFn("/clothes")}
-            className={pathDetector("/clothes")}
+    <>
+      {/* Overlay */}
+      {modalState && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setModalState(false)}
+        ></div>
+      )}
+      <div className={`relative ${containerSettings}`}>
+        <div className={`flex justify-between items-center my-4`}>
+          <div className="uppercase flex gap-6">
+            <Link
+              to="/clothes"
+              data-testid={addDataTestIdFn("/clothes")}
+              className={pathDetector("/clothes")}
+            >
+              Clothes
+            </Link>
+            <Link
+              to="/tech"
+              data-testid={addDataTestIdFn("/tech")}
+              className={pathDetector("/tech")}
+            >
+              Tech
+            </Link>
+          </div>
+          <div className="">Logo</div>
+          <button
+            className=""
+            data-testid="cart-btn"
+            onClick={() => setModalState(!modalState)}
           >
-            Clothes
-          </Link>
-          <Link
-            to="/tech"
-            data-testid={addDataTestIdFn("/tech")}
-            className={pathDetector("/tech")}
-          >
-            Tech
-          </Link>
+            <HiOutlineShoppingCart className="cursor-pointer" />
+            <span>{cart ? cart.length : 0}</span>
+          </button>
         </div>
-        <div className="">Logo</div>
-        <button
-          className=""
-          data-testid="cart-btn"
-          onClick={() => setModalState(!modalState)}
-        >
-          <HiOutlineShoppingCart className="cursor-pointer" />
-          <span>{cart ? cart.length : 0}</span>
-        </button>
+        {modalState && (
+          <div className="relative z-50">
+            <CartModal />
+          </div>
+        )}
       </div>
-      {modalState && <CartModal />}
-    </div>
+    </>
   );
 };

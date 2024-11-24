@@ -18,6 +18,7 @@ type Constants = {
   removeFromCartFn: (item: ICartItem) => void;
   state: RootState;
   resetCart: () => void;
+  totalAmountInCart: number;
 };
 
 export const useDataHOC = <P extends object>(
@@ -32,6 +33,16 @@ export const useDataHOC = <P extends object>(
     const removeFromCartFn = (item: ICartItem) =>
       dispatch(removeItemFromCart(item));
 
+    const totalAmountInCart = +state.cart.cart
+      .reduce((acc, item) => {
+        const product = mockData?.find((p) => p.id === item.id);
+        if (!product) {
+          return acc;
+        }
+        return acc + product.prices[0].amount * item.quantity;
+      }, 0)
+      .toFixed(2);
+
     const constants: Constants = {
       mockData,
       data: [],
@@ -41,6 +52,7 @@ export const useDataHOC = <P extends object>(
       removeFromCartFn,
       state,
       resetCart,
+      totalAmountInCart,
     };
 
     return <WrappedComponent {...props} {...constants} />;

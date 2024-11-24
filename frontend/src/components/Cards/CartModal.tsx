@@ -11,6 +11,7 @@ export const CartModal = useDataHOC(
     addToCartFn,
     removeFromCartFn,
     resetCart,
+    totalAmountInCart,
   }) => {
     if (isLoading) {
       return <h3>Cart Data Loading...</h3>;
@@ -25,7 +26,7 @@ export const CartModal = useDataHOC(
     return (
       <div
         data-testid="cart-total"
-        className="absolute right-0 t-0 p-3 min-h-[300px] w-[300px] z-10 bg-slate-700"
+        className="absolute right-0 t-0 p-3 min-h-[300px] w-[300px] z-10 bg-white"
       >
         <div className="flex flex-col gap-3">
           {cartState.length === 0 && (
@@ -44,8 +45,11 @@ export const CartModal = useDataHOC(
                   key={item.id}
                   {...product}
                   quantity={item.quantity}
-                  incrementFn={() => console.log("increment")}
-                  decrementFn={() => console.log("decrement")}
+                  incrementFn={() => console.log(item)}
+                  decrementFn={() => console.log(item)}
+                  // incrementFn={() => addToCartFn(item)}
+                  // decrementFn={() => removeFromCartFn(item)}
+                  // remove these 2 below later, as they are unused
                   addToCartFn={addToCartFn}
                   removeFromCartFn={removeFromCartFn}
                 />
@@ -59,14 +63,7 @@ export const CartModal = useDataHOC(
               className="text-lg font-semibold text-center"
               data-testid="cart-item-amount"
             >
-              Total ${""}
-              {cartState.reduce((acc, item) => {
-                const product = mockData?.find((p) => p.id === item.id);
-                if (!product) {
-                  return acc;
-                }
-                return acc + product.prices[0].amount * item.quantity;
-              }, 0)}
+              Total $ {totalAmountInCart}
             </div>
             <button
               className="bg-emerald-400 px-4 py-1 rounded-md w-full my-3"
