@@ -45,8 +45,18 @@ export const CartModal = useDataHOC(
                 <CartCard
                   {...product}
                   quantity={item.quantity}
-                  incrementFn={() => addToCartFn(item)}
-                  decrementFn={() => removeFromCartFn(item)}
+                  incrementFn={() =>
+                    addToCartFn({
+                      ...item,
+                      quantity: 1,
+                    })
+                  }
+                  decrementFn={() =>
+                    removeFromCartFn({
+                      ...item,
+                      quantity: 1,
+                    })
+                  }
                 />
               </div>
             );
