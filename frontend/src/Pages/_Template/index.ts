@@ -1,1 +1,1 @@
-export * from "./useDataHOC";
+export * from "./withHOC";

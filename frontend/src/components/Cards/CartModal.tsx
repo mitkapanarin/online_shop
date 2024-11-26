@@ -1,8 +1,8 @@
-import { useDataHOC } from "../../Pages/_Template";
+import { withDataAndState } from "../../Pages/_Template";
 import { toKebabCase } from "../Text";
 import { CartCard } from "./CartCard";
 
-export const CartModal = useDataHOC(
+export const CartModal = withDataAndState(
   ({
     isError,
     isLoading,

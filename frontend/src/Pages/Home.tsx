@@ -1,8 +1,8 @@
 import { containerSettings } from "../_Constants";
 import { ProductCard } from "../components";
-import { useDataHOC } from "./_Template";
+import { withDataAndState } from "./_Template";
 
-export const Home = useDataHOC(
+export const Home = withDataAndState(
   ({ mockData, isLoading, isError, addToCartFn, removeFromCartFn }) => {
     if (isLoading) {
       return <div>Loading...</div>;
