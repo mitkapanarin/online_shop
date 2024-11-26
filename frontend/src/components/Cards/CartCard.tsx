@@ -1,4 +1,4 @@
-import { ProductCardProps } from "../../_Types";
+import { IProduct } from "../../_Types";
 import { textLimiter } from "../Text";
 
 interface ICartCardProps {
@@ -14,7 +14,7 @@ export const CartCard = ({
   decrementFn,
   gallery,
   prices,
-}: ICartCardProps & ProductCardProps) => {
+}: ICartCardProps & IProduct) => {
   const UsdPricing = prices.find((price) => price.currency.label === "USD");
 
   return (

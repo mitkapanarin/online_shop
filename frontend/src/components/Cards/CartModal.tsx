@@ -40,18 +40,13 @@ export const CartModal = useDataHOC(
             return (
               <div
                 data-testid={`cart-item-attribute-${toKebabCase(product.name)}-selected`}
+                key={item.id}
               >
                 <CartCard
-                  key={item.id}
                   {...product}
                   quantity={item.quantity}
-                  incrementFn={() => console.log(item)}
-                  decrementFn={() => console.log(item)}
-                  // incrementFn={() => addToCartFn(item)}
-                  // decrementFn={() => removeFromCartFn(item)}
-                  // remove these 2 below later, as they are unused
-                  addToCartFn={addToCartFn}
-                  removeFromCartFn={removeFromCartFn}
+                  incrementFn={() => addToCartFn(item)}
+                  decrementFn={() => removeFromCartFn(item)}
                 />
               </div>
             );

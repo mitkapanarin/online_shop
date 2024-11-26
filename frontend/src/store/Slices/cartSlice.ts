@@ -1,12 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICartItem } from "../../_Types";
 
-interface ICartSliceStateProps {
+interface CartState {
   cart: ICartItem[];
 }
 
-const initialState: ICartSliceStateProps = {
+const initialState: CartState = {
   cart: [],
 };
 
@@ -14,36 +13,27 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItemToCart: (
-      state: ICartSliceStateProps,
-      action: PayloadAction<ICartItem>,
-    ) => {
+    addItemToCart: (state, action: PayloadAction<ICartItem>) => {
       const { id, quantity } = action.payload;
       const existingItem = state.cart.find((item) => item.id === id);
-
       if (existingItem) {
         existingItem.quantity += quantity;
       } else {
         state.cart.push(action.payload);
       }
     },
-
     removeItemFromCart: (
-      state: ICartSliceStateProps,
-      action: PayloadAction<ICartItem>,
+      state,
+      action: PayloadAction<{ id: string; quantity: number }>,
     ) => {
       const { id, quantity } = action.payload;
-      const existingItem = state.cart.find(
-        (item) => item.id === id,
-      ) as ICartItem;
-
-      if (!existingItem) {
-        return;
-      } else {
+      const existingItemIndex = state.cart.findIndex((item) => item.id === id);
+      if (existingItemIndex !== -1) {
+        const existingItem = state.cart[existingItemIndex];
         if (existingItem.quantity > quantity) {
           existingItem.quantity -= quantity;
         } else {
-          state.cart = state.cart.filter((item) => item.id !== id);
+          state.cart.splice(existingItemIndex, 1);
         }
       }
     },
@@ -51,5 +41,5 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addItemToCart, resetCart, removeItemFromCart } =
+export const { addItemToCart, removeItemFromCart, resetCart } =
   cartSlice.actions;
