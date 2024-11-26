@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { ICartItem, IProduct } from "../../_Types";
+import { DataProps, ICartItem, StateProps } from "../../_Types";
 import { mockData } from "../../components/MockData";
 import {
   addItemToCart,
@@ -7,22 +7,6 @@ import {
   RootState,
   resetCart,
 } from "../../store";
-
-// Define types
-type DataProps = {
-  data: IProduct[];
-  mockData: IProduct[];
-  isLoading: boolean;
-  isError: boolean;
-};
-
-type StateProps = {
-  addToCartFn: (item: ICartItem) => void;
-  removeFromCartFn: (item: ICartItem) => void;
-  state: RootState;
-  resetCart: () => void;
-  totalAmountInCart: number;
-};
 
 export const withState = <P extends object>(
   WrappedComponent: React.ComponentType<P & StateProps>,

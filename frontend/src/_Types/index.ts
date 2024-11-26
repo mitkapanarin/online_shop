@@ -1,3 +1,5 @@
+import { RootState } from "../store";
+
 export interface ICartItem {
   id: string;
   quantity: number;
@@ -70,7 +72,22 @@ export interface IDataFetch {
   };
 }
 
-export interface ProductCardProps extends IProduct {
+export interface ICartItemFunctions {
   addToCartFn: (item: ICartItem) => void;
   removeFromCartFn: (item: ICartItem) => void;
 }
+
+export type IProductCard = IProduct & ICartItemFunctions;
+
+export type DataProps = {
+  data: IProduct[];
+  mockData: IProduct[];
+  isLoading: boolean;
+  isError: boolean;
+};
+
+export type StateProps = {
+  state: RootState;
+  resetCart: () => void;
+  totalAmountInCart: number;
+} & ICartItemFunctions;

@@ -16,26 +16,24 @@ export const cartSlice = createSlice({
     addItemToCart: (state, action: PayloadAction<ICartItem>) => {
       const { id, quantity } = action.payload;
       const existingItem = state.cart.find((item) => item.id === id);
+
       if (existingItem) {
         existingItem.quantity += quantity;
       } else {
         state.cart.push(action.payload);
       }
     },
-    removeItemFromCart: (
-      state,
-      action: PayloadAction<{ id: string; quantity: number }>,
-    ) => {
+    removeItemFromCart: (state, action: PayloadAction<ICartItem>) => {
       const { id, quantity } = action.payload;
-      const existingItemIndex = state.cart.findIndex((item) => item.id === id);
-      if (existingItemIndex !== -1) {
-        if (
-          quantity === -1 ||
-          state.cart[existingItemIndex].quantity <= quantity
-        ) {
-          state.cart.splice(existingItemIndex, 1);
-        } else {
-          state.cart[existingItemIndex].quantity -= quantity;
+      const itemIndex = state.cart.findIndex((item) => item.id === id);
+
+      if (itemIndex !== -1) {
+        const item = state.cart[itemIndex];
+        item.quantity =
+          quantity === -1 ? 0 : Math.max(0, item.quantity - quantity);
+
+        if (item.quantity === 0) {
+          state.cart.splice(itemIndex, 1);
         }
       }
     },

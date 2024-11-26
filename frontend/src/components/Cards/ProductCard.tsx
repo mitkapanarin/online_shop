@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { cn } from "../../utils";
 import { RootState } from "../../store";
-import { ProductCardProps } from "../../_Types";
+import { IProductCard } from "../../_Types";
 
 export const ProductCard = ({
   id,
@@ -14,7 +14,7 @@ export const ProductCard = ({
   prices,
   addToCartFn,
   removeFromCartFn,
-}: ProductCardProps) => {
+}: IProductCard) => {
   const [isHovered, setIsHovered] = useState(false);
   const isSelected = useSelector((state: RootState) =>
     state.cart.cart.some((item) => item.id === id),
