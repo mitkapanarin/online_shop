@@ -24,8 +24,11 @@ export const ProductCard = ({
   const handleCartAction = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const fn = isSelected ? removeFromCartFn : addToCartFn;
-    fn({ id, quantity: 1 });
+    if (isSelected) {
+      removeFromCartFn({ id, quantity: -1 });
+    } else {
+      addToCartFn({ id, quantity: 1 });
+    }
   };
 
   return (

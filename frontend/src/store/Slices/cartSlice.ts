@@ -29,11 +29,13 @@ export const cartSlice = createSlice({
       const { id, quantity } = action.payload;
       const existingItemIndex = state.cart.findIndex((item) => item.id === id);
       if (existingItemIndex !== -1) {
-        const existingItem = state.cart[existingItemIndex];
-        if (existingItem.quantity > quantity) {
-          existingItem.quantity -= quantity;
-        } else {
+        if (
+          quantity === -1 ||
+          state.cart[existingItemIndex].quantity <= quantity
+        ) {
           state.cart.splice(existingItemIndex, 1);
+        } else {
+          state.cart[existingItemIndex].quantity -= quantity;
         }
       }
     },
