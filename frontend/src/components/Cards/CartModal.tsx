@@ -4,8 +4,6 @@ import { CartCard } from "./CartCard";
 
 export const CartModal = withDataAndState(
   ({
-    isError,
-    isLoading,
     mockData,
     state,
     addToCartFn,
@@ -13,14 +11,6 @@ export const CartModal = withDataAndState(
     resetCart,
     totalAmountInCart,
   }) => {
-    if (isLoading) {
-      return <h3>Cart Data Loading...</h3>;
-    }
-
-    if (isError) {
-      return <h3>Error fetching cart data</h3>;
-    }
-
     const cartState = state.cart.cart;
 
     return (

@@ -31,7 +31,7 @@ export const withState = <P extends object>(
     const stateProps: StateProps = {
       addToCartFn,
       removeFromCartFn,
-      resetCart,
+      resetCart: () => dispatch(resetCart()),
       state,
       totalAmountInCart,
     };
