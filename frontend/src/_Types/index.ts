@@ -31,7 +31,7 @@ export interface IAttribute {
   id: string;
   items: IAttributeItem[];
   name: string;
-  type: string;
+  type: "text" | "swatch";
   __typename: string;
 }
 
