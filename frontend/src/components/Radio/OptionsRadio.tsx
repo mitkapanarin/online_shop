@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IAttribute } from "../../_Types";
+import { cn } from "../../utils";
 
 export const OptionsRadio = ({
   items,
@@ -13,22 +14,25 @@ export const OptionsRadio = ({
 
   const textSizeClass = variant === "small" ? "text-xs" : "text-lg";
   const swatchSizeClass = variant === "small" ? "w-7 h-7" : "w-18 h-18";
+  const cardGapClass = variant === "small" ? "gap-1.5" : "gap-2.5";
+
+  const isVariantSmall = variant === "small";
 
   if (type === "text") {
     return (
       <div className={textSizeClass}>
-        <h3 className={`font-semibold my-2 text-slate-600 ${textSizeClass}`}>
+        <h3 className={cn(`font-semibold my-2 text-slate-600`, textSizeClass)}>
           {name} :
         </h3>
-        <div className="flex flex-wrap gap-2">
+        <div className={cn("flex flex-wrap", cardGapClass)}>
           {items?.map((item) => (
             <button
               key={item?.id}
-              className={`px-3 py-1 border rounded-md ${textSizeClass} ${
-                selectedItem === item?.id
-                  ? "border-green-500 bg-green-100"
-                  : "border-gray-300 hover:border-gray-400"
-              }`}
+              className={cn("px-3 py-1 border rounded-md", textSizeClass, {
+                "border-green-500 bg-green-100": selectedItem === item?.id,
+                "border-gray-300 hover:border-gray-400":
+                  selectedItem !== item?.id,
+              })}
               onClick={() => setSelectedItem(item?.id)}
             >
               {item?.displayValue}
@@ -40,30 +44,34 @@ export const OptionsRadio = ({
   } else if (type === "swatch") {
     return (
       <div className={textSizeClass}>
-        <h3 className={`font-semibold my-2 text-slate-600 ${textSizeClass}`}>
+        <h3 className={cn(`font-semibold my-2 text-slate-600`, textSizeClass)}>
           {name} :
         </h3>
-        <div className="flex flex-wrap gap-2">
+        <div className={cn("flex flex-wrap", cardGapClass)}>
           {items?.map((item) => (
-            <button
-              key={item?.id}
-              className={`${swatchSizeClass} border-2 ${
-                selectedItem === item?.id
-                  ? "border-green-500"
-                  : "border-transparent"
-              }`}
-              style={{ backgroundColor: item?.value }}
-              onClick={() => setSelectedItem(item?.id)}
-              title={item?.displayValue}
-            >
-              {selectedItem === item?.id && (
-                <span
-                  className={`text-white ${variant === "small" ? "text-xs" : "text-base"}`}
-                >
-                  ✓
-                </span>
-              )}
-            </button>
+            <>
+              <button
+                key={item?.id}
+                className={cn(swatchSizeClass, "border-2", {
+                  "border-green-500": selectedItem === item?.id,
+                  "border-transparent": selectedItem !== item?.id,
+                })}
+                style={{ backgroundColor: item?.value }}
+                onClick={() => setSelectedItem(item?.id)}
+                title={item?.displayValue}
+              >
+                {selectedItem === item?.id && (
+                  <span
+                    className={cn("text-white", {
+                      "text-xs": isVariantSmall,
+                      "text-base": !isVariantSmall,
+                    })}
+                  >
+                    ✓
+                  </span>
+                )}
+              </button>
+            </>
           ))}
         </div>
       </div>
