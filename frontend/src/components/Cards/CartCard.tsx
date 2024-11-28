@@ -1,5 +1,5 @@
 import { IProduct } from "../../_Types";
-import { TextRadio } from "../Radio";
+import { OptionsRadio } from "../Radio";
 import { textLimiter } from "../Text";
 
 interface ICartCardProps {
@@ -33,7 +33,7 @@ export const CartCard = ({
             {UsdPricing?.currency?.symbol} {UsdPricing?.amount}
           </p>
           {attributes?.map((item, index) => (
-            <TextRadio key={index} {...item} />
+            <OptionsRadio key={index} {...item} variant="small" />
           ))}
         </div>
         <div>

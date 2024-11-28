@@ -1,1 +1,1 @@
-export * from "./TextRadio";
+export * from "./OptionsRadio";
