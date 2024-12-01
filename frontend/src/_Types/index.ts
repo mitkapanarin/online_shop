@@ -4,22 +4,15 @@ export interface ICartItem {
   id: string;
   quantity: number;
   attributes?: {
-    [key: string]: string;
-  };
+    attributeId: string;
+    attributeItemId: string;
+  }[];
 }
 
 export interface IProductOnCartStats {
   isSelected: boolean;
   addToCartFn: () => void;
   removeFromCartFn: () => void;
-}
-
-export interface ICartItem {
-  id: string;
-  quantity: number;
-  attributes?: {
-    [key: string]: string;
-  };
 }
 
 export interface ICategory {

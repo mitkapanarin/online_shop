@@ -16,6 +16,7 @@ export const CartCard = ({
   gallery,
   prices,
   attributes,
+  id,
 }: ICartCardProps & IProduct) => {
   const UsdPricing = prices.find((price) => price.currency.label === "USD");
 
@@ -33,7 +34,12 @@ export const CartCard = ({
             {UsdPricing?.currency?.symbol} {UsdPricing?.amount}
           </p>
           {attributes?.map((item, index) => (
-            <OptionsRadio key={index} {...item} variant="small" />
+            <OptionsRadio
+              key={index}
+              {...item}
+              variant="small"
+              productId={id}
+            />
           ))}
         </div>
         <div>

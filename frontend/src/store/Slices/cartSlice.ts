@@ -37,9 +37,41 @@ export const cartSlice = createSlice({
         }
       }
     },
+    updateCartItemAttribute: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        attribute: { attributeId: string; attributeItemId: string };
+      }>,
+    ) => {
+      const { id, attribute } = action.payload;
+      const cartItem = state.cart.find((item) => item.id === id);
+
+      if (cartItem) {
+        if (!cartItem.attributes) {
+          cartItem.attributes = [];
+        }
+
+        const existingAttributeIndex = cartItem.attributes.findIndex(
+          (attr) => attr.attributeId === attribute.attributeId,
+        );
+
+        if (existingAttributeIndex !== -1) {
+          // Update existing attribute
+          cartItem.attributes[existingAttributeIndex] = attribute;
+        } else {
+          // Add new attribute
+          cartItem.attributes.push(attribute);
+        }
+      }
+    },
     resetCart: () => initialState,
   },
 });
 
-export const { addItemToCart, removeItemFromCart, resetCart } =
-  cartSlice.actions;
+export const {
+  addItemToCart,
+  removeItemFromCart,
+  resetCart,
+  updateCartItemAttribute,
+} = cartSlice.actions;

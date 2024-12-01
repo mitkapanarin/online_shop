@@ -1,22 +1,37 @@
 import { useState } from "react";
 import { IAttribute } from "../../_Types";
 import { cn } from "../../utils";
+import { RootState, updateCartItemAttribute } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
 
 export const OptionsRadio = ({
   items,
   name,
   type,
   variant = "small",
+  productId,
+  id: attributeId,
 }: IAttribute & {
   variant: "small" | "large";
+  productId: string;
 }) => {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
-  const textSizeClass = variant === "small" ? "text-xs" : "text-lg";
-  const swatchSizeClass = variant === "small" ? "w-7 h-7" : "w-18 h-18";
-  const cardGapClass = variant === "small" ? "gap-1.5" : "gap-2.5";
+  const dispatch = useDispatch();
+  const selectedItemFromCart = useSelector(
+    (state: RootState) => state.cart.cart,
+  )
+    .find((item) => item.id === productId)
+    ?.attributes?.find(
+      (attr) => attr.attributeId === attributeId,
+    )?.attributeItemId;
+  const [selectedItem, setSelectedItem] = useState<string | null>(
+    selectedItemFromCart || null,
+  );
 
   const isVariantSmall = variant === "small";
+
+  const textSizeClass = isVariantSmall ? "text-xs" : "text-lg";
+  const swatchSizeClass = isVariantSmall ? "w-7 h-7" : "w-18 h-18";
+  const cardGapClass = isVariantSmall ? "gap-1.5" : "gap-2.5";
 
   if (type === "text") {
     return (
@@ -33,7 +48,15 @@ export const OptionsRadio = ({
                 "border-gray-300 hover:border-gray-400":
                   selectedItem !== item?.id,
               })}
-              onClick={() => setSelectedItem(item?.id)}
+              onClick={() => {
+                setSelectedItem(item?.id);
+                dispatch(
+                  updateCartItemAttribute({
+                    id: productId,
+                    attribute: { attributeId, attributeItemId: item?.id },
+                  }),
+                );
+              }}
             >
               {item?.displayValue}
             </button>
@@ -52,12 +75,20 @@ export const OptionsRadio = ({
             <>
               <button
                 key={item?.id}
-                className={cn(swatchSizeClass, "border-2", {
-                  "border-green-500": selectedItem === item?.id,
+                className={cn(swatchSizeClass, "border-4", {
+                  "border-green-500 rounded-sm": selectedItem === item?.id,
                   "border-transparent": selectedItem !== item?.id,
                 })}
                 style={{ backgroundColor: item?.value }}
-                onClick={() => setSelectedItem(item?.id)}
+                onClick={() => {
+                  setSelectedItem(item?.id);
+                  dispatch(
+                    updateCartItemAttribute({
+                      id: productId,
+                      attribute: { attributeId, attributeItemId: item?.id },
+                    }),
+                  );
+                }}
                 title={item?.displayValue}
               >
                 {selectedItem === item?.id && (
