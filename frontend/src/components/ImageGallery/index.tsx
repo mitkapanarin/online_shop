@@ -53,12 +53,6 @@ export const ImageGallery = ({ gallery }: Pick<IProduct, "gallery">) => {
           ))}
         </div>
         <div className="relative flex-grow">
-          <button
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
-            onClick={handlePrev}
-          >
-            👈
-          </button>
           <img
             src={gallery[currentIndex]}
             alt={`Main ${currentIndex + 1}`}
@@ -70,7 +64,25 @@ export const ImageGallery = ({ gallery }: Pick<IProduct, "gallery">) => {
             onClick={handleMainImageClick}
           />
           <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+            className={cn(
+              "absolute top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full",
+              {
+                "left-2": !isEnlarged,
+                "fixed left-4 z-50": isEnlarged,
+              },
+            )}
+            onClick={handlePrev}
+          >
+            👈
+          </button>
+          <button
+            className={cn(
+              "absolute top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full",
+              {
+                "right-2": !isEnlarged,
+                "fixed right-4 z-50": isEnlarged,
+              },
+            )}
             onClick={handleNext}
           >
             👉
