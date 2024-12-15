@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { containerSettings } from "../_Constants";
 import { ImageGallery } from "../components/ImageGallery";
 import { OptionsRadio } from "../components/Radio";
@@ -16,6 +17,35 @@ export const ProductDetails = withDataAndState(({ mockData, addToCartFn }) => {
   const currencySymbol = currency?.currency.symbol;
   const productPrice = currency?.amount;
 
+  const [selectedAttributes, setSelectedAttributes] = useState<
+    Record<string, string>
+  >({});
+
+  const handleAttributeChange = (
+    attributeId: string,
+    attributeItemId: string,
+  ) => {
+    setSelectedAttributes((prev) => ({
+      ...prev,
+      [attributeId]: attributeItemId,
+    }));
+  };
+
+  const handleAddToCart = () => {
+    addToCartFn({
+      id: id!,
+      quantity: 1,
+      attributes: Object.entries(selectedAttributes).map(
+        ([attributeId, attributeItemId]) => ({
+          attributeId,
+          attributeItemId,
+        }),
+      ),
+    });
+    // Reset selected attributes
+    setSelectedAttributes({});
+  };
+
   return (
     <div className={cn(containerSettings)}>
       <div className="grid grid-cols-2 gap-10">
@@ -28,6 +58,10 @@ export const ProductDetails = withDataAndState(({ mockData, addToCartFn }) => {
               {...item}
               productId={id!}
               variant="large"
+              onChange={(attributeItemId) =>
+                handleAttributeChange(item.id, attributeItemId)
+              }
+              selectedItemId={selectedAttributes[item.id]}
             />
           ))}
           <div className="text-lg font-bold my-4">
@@ -36,15 +70,7 @@ export const ProductDetails = withDataAndState(({ mockData, addToCartFn }) => {
               {currencySymbol} {productPrice}
             </h6>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={() =>
-              addToCartFn({
-                id: id!,
-                quantity: 1,
-              })
-            }
-          >
+          <button className="btn btn-primary" onClick={handleAddToCart}>
             Add to cart
           </button>
         </div>
