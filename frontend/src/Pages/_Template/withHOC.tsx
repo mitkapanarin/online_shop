@@ -6,6 +6,8 @@ import {
   removeItemFromCart,
   RootState,
   resetCart,
+  updateCartItemAttribute,
+  updateCartItemQuantity,
 } from "../../store";
 
 export const withState = <P extends object>(
@@ -15,7 +17,16 @@ export const withState = <P extends object>(
     const dispatch = useDispatch();
     const state = useSelector((state: RootState) => state);
 
-    const addToCartFn = (item: ICartItem) => dispatch(addItemToCart(item));
+    const addToCartFn = (item: Omit<ICartItem, "orderId">) =>
+      dispatch(addItemToCart(item));
+    const updateCartItemAttributeFn = (item: {
+      orderId: string;
+      attribute: { attributeId: string; attributeItemId: string };
+    }) => dispatch(updateCartItemAttribute(item));
+    const updateCartItemQuantityFn = (
+      item: Pick<ICartItem, "orderId" | "quantity">,
+    ) => dispatch(updateCartItemQuantity(item));
+
     const removeFromCartFn = (item: ICartItem) =>
       dispatch(removeItemFromCart(item));
 
@@ -34,6 +45,8 @@ export const withState = <P extends object>(
       resetCart: () => dispatch(resetCart()),
       state,
       totalAmountInCart,
+      updateCartItemQuantityFn,
+      updateCartItemAttributeFn,
     };
 
     return <WrappedComponent {...props} {...stateProps} />;

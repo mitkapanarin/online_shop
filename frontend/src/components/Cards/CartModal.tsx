@@ -6,13 +6,12 @@ export const CartModal = withDataAndState(
   ({
     mockData,
     state,
-    addToCartFn,
-    removeFromCartFn,
     resetCart,
     totalAmountInCart,
+    updateCartItemQuantityFn,
+    updateCartItemAttributeFn,
   }) => {
     const cartState = state.cart.cart;
-
     return (
       <div
         data-testid="cart-total"
@@ -25,26 +24,28 @@ export const CartModal = withDataAndState(
           {cartState?.map((item) => {
             const product = mockData?.find((p) => p.id === item.id);
             if (!product) {
-              return;
+              return null;
             }
             return (
               <div
                 data-testid={`cart-item-attribute-${toKebabCase(product.name)}-selected`}
-                key={item.id}
+                key={item.orderId}
               >
                 <CartCard
                   {...product}
                   quantity={item.quantity}
                   incrementFn={() =>
-                    addToCartFn({
+                    updateCartItemQuantityFn({
                       ...item,
+                      orderId: item.orderId,
                       quantity: 1,
                     })
                   }
                   decrementFn={() =>
-                    removeFromCartFn({
+                    updateCartItemQuantityFn({
                       ...item,
-                      quantity: 1,
+                      orderId: item.orderId,
+                      quantity: -1,
                     })
                   }
                 />

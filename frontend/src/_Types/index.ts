@@ -1,6 +1,7 @@
 import { RootState } from "../store";
 
 export interface ICartItem {
+  orderId: string;
   id: string;
   quantity: number;
   attributes?: {
@@ -66,8 +67,13 @@ export interface IDataFetch {
 }
 
 export interface ICartItemFunctions {
-  addToCartFn: (item: ICartItem) => void;
+  addToCartFn: (item: Omit<ICartItem, "orderId">) => void;
   removeFromCartFn: (item: ICartItem) => void;
+  updateCartItemQuantityFn: (item: ICartItem) => void;
+  updateCartItemAttributeFn: (item: {
+    orderId: string;
+    attribute: { attributeId: string; attributeItemId: string };
+  }) => void;
 }
 
 export type IProductCard = IProduct & ICartItemFunctions;

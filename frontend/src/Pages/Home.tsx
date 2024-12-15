@@ -3,7 +3,14 @@ import { ProductCard } from "../components";
 import { withDataAndState } from "./_Template";
 
 export const Home = withDataAndState(
-  ({ mockData, isLoading, isError, addToCartFn, removeFromCartFn }) => {
+  ({
+    mockData,
+    isLoading,
+    isError,
+    addToCartFn,
+    removeFromCartFn,
+    updateCartItemQuantityFn,
+  }) => {
     if (isLoading) {
       return <div>Loading...</div>;
     }
@@ -20,6 +27,7 @@ export const Home = withDataAndState(
               {...item}
               addToCartFn={addToCartFn}
               removeFromCartFn={removeFromCartFn}
+              updateCartItemQuantityFn={updateCartItemQuantityFn}
             />
           ))}
         </div>

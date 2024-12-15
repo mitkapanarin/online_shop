@@ -13,7 +13,7 @@ export const ProductCard = ({
   gallery,
   prices,
   addToCartFn,
-  removeFromCartFn,
+  // removeFromCartFn,
 }: IProductCard) => {
   const [isHovered, setIsHovered] = useState(false);
   const isSelected = useSelector((state: RootState) =>
@@ -25,7 +25,7 @@ export const ProductCard = ({
     e.preventDefault();
     e.stopPropagation();
     if (isSelected) {
-      removeFromCartFn({ id, quantity: -1 });
+      // removeFromCartFn({ id, quantity: -1 });
     } else {
       addToCartFn({ id, quantity: 1 });
     }

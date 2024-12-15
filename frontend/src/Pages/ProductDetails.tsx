@@ -5,7 +5,7 @@ import { cn } from "../utils";
 import { withDataAndState } from "./_Template";
 import { useParams } from "react-router-dom";
 
-export const ProductDetails = withDataAndState(({ mockData }) => {
+export const ProductDetails = withDataAndState(({ mockData, addToCartFn }) => {
   const { id } = useParams();
 
   const product = mockData?.find((p) => p.id === id);
@@ -36,7 +36,17 @@ export const ProductDetails = withDataAndState(({ mockData }) => {
               {currencySymbol} {productPrice}
             </h6>
           </div>
-          <button className="btn btn-primary">Add to cart</button>
+          <button
+            className="btn btn-primary"
+            onClick={() =>
+              addToCartFn({
+                id: id!,
+                quantity: 1,
+              })
+            }
+          >
+            Add to cart
+          </button>
         </div>
       </div>
     </div>

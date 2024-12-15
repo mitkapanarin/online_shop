@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICartItem } from "../../_Types";
+import { v4 as uuidv4 } from "uuid";
 
 interface CartState {
   cart: ICartItem[];
@@ -13,54 +14,55 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItemToCart: (state, action: PayloadAction<ICartItem>) => {
-      const { id, quantity } = action.payload;
-      const existingItem = state.cart.find((item) => item.id === id);
-
-      if (existingItem) {
-        existingItem.quantity += quantity;
-      } else {
-        state.cart.push(action.payload);
-      }
+    addItemToCart: (
+      state,
+      action: PayloadAction<Omit<ICartItem, "orderId">>,
+    ) => {
+      const newItem = {
+        ...action.payload,
+        orderId: uuidv4(),
+      };
+      state.cart.push(newItem);
     },
-    removeItemFromCart: (state, action: PayloadAction<ICartItem>) => {
-      const { id, quantity } = action.payload;
-      const itemIndex = state.cart.findIndex((item) => item.id === id);
-
-      if (itemIndex !== -1) {
-        const item = state.cart[itemIndex];
-        item.quantity =
-          quantity === -1 ? 0 : Math.max(0, item.quantity - quantity);
-
-        if (item.quantity === 0) {
-          state.cart.splice(itemIndex, 1);
+    updateCartItemQuantity: (
+      state,
+      action: PayloadAction<Pick<ICartItem, "orderId" | "quantity">>,
+    ) => {
+      const { orderId, quantity } = action.payload;
+      const existingItem = state.cart.find((item) => item.orderId === orderId);
+      if (existingItem) {
+        existingItem.quantity = Math.max(0, existingItem.quantity + quantity);
+        if (existingItem.quantity === 0) {
+          state.cart = state.cart.filter((item) => item.orderId !== orderId);
         }
       }
+    },
+    removeItemFromCart: (
+      state,
+      action: PayloadAction<Pick<ICartItem, "orderId">>,
+    ) => {
+      const { orderId } = action.payload;
+      state.cart = state.cart.filter((item) => item.orderId !== orderId);
     },
     updateCartItemAttribute: (
       state,
       action: PayloadAction<{
-        id: string;
+        orderId: string;
         attribute: { attributeId: string; attributeItemId: string };
       }>,
     ) => {
-      const { id, attribute } = action.payload;
-      const cartItem = state.cart.find((item) => item.id === id);
-
+      const { orderId, attribute } = action.payload;
+      const cartItem = state.cart.find((item) => item.orderId === orderId);
       if (cartItem) {
         if (!cartItem.attributes) {
           cartItem.attributes = [];
         }
-
         const existingAttributeIndex = cartItem.attributes.findIndex(
           (attr) => attr.attributeId === attribute.attributeId,
         );
-
         if (existingAttributeIndex !== -1) {
-          // Update existing attribute
           cartItem.attributes[existingAttributeIndex] = attribute;
         } else {
-          // Add new attribute
           cartItem.attributes.push(attribute);
         }
       }
@@ -71,7 +73,8 @@ export const cartSlice = createSlice({
 
 export const {
   addItemToCart,
+  updateCartItemQuantity,
   removeItemFromCart,
-  resetCart,
   updateCartItemAttribute,
+  resetCart,
 } = cartSlice.actions;
