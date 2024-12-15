@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { cn } from "../../utils";
-import { RootState, updateCartItemAttribute } from "../../store";
 import { IAttribute } from "../../_Types";
 
 interface OptionsRadioProps extends IAttribute {
   variant: "small" | "large";
   productId: string;
+  onChange?: (attributeItemId: string) => void;
+  selectedItemId?: string;
 }
 
 export const OptionsRadio: React.FC<OptionsRadioProps> = ({
@@ -14,34 +14,17 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
   name,
   type,
   variant = "small",
-  productId,
-  id: attributeId,
+  onChange,
+  selectedItemId,
 }) => {
-  const dispatch = useDispatch();
-  const selectedItemFromCart = useSelector(
-    (state: RootState) =>
-      state.cart.cart
-        .find((item) => item.id === productId)
-        ?.attributes?.find((attr) => attr.attributeId === attributeId)
-        ?.attributeItemId,
-  );
-
-  const [selectedItem, setSelectedItem] = useState<string | null>(
-    selectedItemFromCart || null,
-  );
-
   const isSmall = variant === "small";
   const sizeClass = isSmall ? "text-xs" : "text-lg";
   const gapClass = isSmall ? "gap-1.5" : "gap-2.5";
 
   const handleItemClick = (itemId: string) => {
-    setSelectedItem(itemId);
-    dispatch(
-      updateCartItemAttribute({
-        id: productId,
-        attribute: { attributeId, attributeItemId: itemId },
-      }),
-    );
+    if (onChange) {
+      onChange(itemId);
+    }
   };
 
   const renderItems = () => {
@@ -50,8 +33,9 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
         <button
           key={item?.id}
           className={cn("px-3 py-1 border rounded-md", sizeClass, {
-            "border-green-500 bg-green-100": selectedItem === item?.id,
-            "border-gray-300 hover:border-gray-400": selectedItem !== item?.id,
+            "border-green-500 bg-green-100": selectedItemId === item?.id,
+            "border-gray-300 hover:border-gray-400":
+              selectedItemId !== item?.id,
           })}
           onClick={() => item?.id && handleItemClick(item.id)}
         >
@@ -65,14 +49,14 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
         <button
           key={item?.id}
           className={cn(isSmall ? "w-7 h-7" : "w-18 h-18", "border-4", {
-            "border-green-500 rounded-sm": selectedItem === item?.id,
-            "border-transparent": selectedItem !== item?.id,
+            "border-green-500 rounded-sm": selectedItemId === item?.id,
+            "border-transparent": selectedItemId !== item?.id,
           })}
           style={{ backgroundColor: item?.value }}
           onClick={() => item?.id && handleItemClick(item.id)}
           title={item?.displayValue}
         >
-          {selectedItem === item?.id && (
+          {selectedItemId === item?.id && (
             <span
               className={cn("text-white", isSmall ? "text-xs" : "text-base")}
             >

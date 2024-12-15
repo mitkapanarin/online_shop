@@ -6,6 +6,8 @@ interface ICartCardProps {
   quantity: number;
   incrementFn: () => void;
   decrementFn: () => void;
+  updateAttributeFn: (attributeId: string, attributeItemId: string) => void;
+  selectedAttributes: { attributeId: string; attributeItemId: string }[];
 }
 
 export const CartCard = ({
@@ -13,10 +15,12 @@ export const CartCard = ({
   quantity,
   incrementFn,
   decrementFn,
+  updateAttributeFn,
   gallery,
   prices,
   attributes,
   id,
+  selectedAttributes,
 }: ICartCardProps & IProduct) => {
   const UsdPricing = prices.find((price) => price.currency.label === "USD");
 
@@ -33,14 +37,23 @@ export const CartCard = ({
           <p className="font-semibold">
             {UsdPricing?.currency?.symbol} {UsdPricing?.amount}
           </p>
-          {attributes?.map((item, index) => (
-            <OptionsRadio
-              key={index}
-              {...item}
-              variant="small"
-              productId={id}
-            />
-          ))}
+          {attributes?.map((item, index) => {
+            const selectedAttribute = selectedAttributes.find(
+              (attr) => attr.attributeId === item.id,
+            );
+            return (
+              <OptionsRadio
+                key={index}
+                {...item}
+                variant="small"
+                productId={id}
+                onChange={(attributeItemId) =>
+                  updateAttributeFn(item.id, attributeItemId)
+                }
+                selectedItemId={selectedAttribute?.attributeItemId}
+              />
+            );
+          })}
         </div>
         <div>
           <img

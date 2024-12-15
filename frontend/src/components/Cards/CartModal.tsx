@@ -12,6 +12,7 @@ export const CartModal = withDataAndState(
     updateCartItemAttributeFn,
   }) => {
     const cartState = state.cart.cart;
+    console.log("cartState: ", cartState);
     return (
       <div
         data-testid="cart-total"
@@ -34,6 +35,7 @@ export const CartModal = withDataAndState(
                 <CartCard
                   {...product}
                   quantity={item.quantity}
+                  selectedAttributes={item.attributes || []}
                   incrementFn={() =>
                     updateCartItemQuantityFn({
                       ...item,
@@ -46,6 +48,15 @@ export const CartModal = withDataAndState(
                       ...item,
                       orderId: item.orderId,
                       quantity: -1,
+                    })
+                  }
+                  updateAttributeFn={(
+                    attributeId: string,
+                    attributeItemId: string,
+                  ) =>
+                    updateCartItemAttributeFn({
+                      orderId: item.orderId,
+                      attribute: { attributeId, attributeItemId },
                     })
                   }
                 />
