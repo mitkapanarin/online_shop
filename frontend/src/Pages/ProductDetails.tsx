@@ -70,7 +70,10 @@ export const ProductDetails = withDataAndState(({ mockData, addToCartFn }) => {
               {currencySymbol} {productPrice}
             </h6>
           </div>
-          <button className="btn btn-primary" onClick={handleAddToCart}>
+          <button
+            className="bg-emerald-400 text-white px-6 py-2 rounded-md hover:bg-emerald-500 transition-colors duration-200 ease-in-out"
+            onClick={handleAddToCart}
+          >
             Add to cart
           </button>
         </div>

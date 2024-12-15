@@ -32,16 +32,11 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
       return items?.map((item) => (
         <button
           key={item?.id}
-          className={cn(
-            "px-4 py-2 border rounded-md transition-colors",
-            sizeClass,
-            {
-              "bg-emerald-400 text-white border-emerald-500":
-                selectedItemId === item?.id,
-              "border-gray-300 hover:border-gray-400 hover:bg-gray-100":
-                selectedItemId !== item?.id,
-            },
-          )}
+          className={cn("px-3 py-1 border rounded-md", sizeClass, {
+            "border-green-500 bg-green-100": selectedItemId === item?.id,
+            "border-gray-300 hover:border-gray-400":
+              selectedItemId !== item?.id,
+          })}
           onClick={() => item?.id && handleItemClick(item.id)}
         >
           {item?.displayValue}
