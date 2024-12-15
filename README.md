@@ -2,19 +2,19 @@
 
 This project showcases my skills in full stack development, handling dynamic data, and designing user interfaces.
 
-## Backend:
+## Backend
 
 PHP
 MySQL
 GraphQL
 OOP design
 
-## Frontend:
+## Frontend
 
-ReactJS (class components)
+ReactJS (Functional components)
 Figma designs
 
-## Features:
+## Features
 
 Single Page Application (SPA)
 Dynamic data fetched via GraphQL

@@ -1,13 +1,15 @@
 import { RootState } from "../store";
 
+export interface IProductAttribute {
+  attributeId: string;
+  attributeItemId: string;
+}
+
 export interface ICartItem {
   orderId: string;
   id: string;
   quantity: number;
-  attributes?: {
-    attributeId: string;
-    attributeItemId: string;
-  }[];
+  attributes?: IProductAttribute[];
 }
 
 export interface IProductOnCartStats {
@@ -72,7 +74,7 @@ export interface ICartItemFunctions {
   updateCartItemQuantityFn: (item: ICartItem) => void;
   updateCartItemAttributeFn: (item: {
     orderId: string;
-    attribute: { attributeId: string; attributeItemId: string };
+    attribute: IProductAttribute;
   }) => void;
 }
 

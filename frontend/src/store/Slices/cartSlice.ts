@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICartItem } from "../../_Types";
+import { ICartItem, IProductAttribute } from "../../_Types";
 import { v4 as uuidv4 } from "uuid";
 
 interface CartState {
@@ -48,7 +48,7 @@ export const cartSlice = createSlice({
       state,
       action: PayloadAction<{
         orderId: string;
-        attribute: { attributeId: string; attributeItemId: string };
+        attribute: IProductAttribute;
       }>,
     ) => {
       const { orderId, attribute } = action.payload;
