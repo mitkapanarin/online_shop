@@ -4,7 +4,7 @@ import { withDataAndState } from "./_Template";
 
 export const Home = withDataAndState(
   ({
-    mockData,
+    data,
     isLoading,
     isError,
     addToCartFn,
@@ -22,7 +22,7 @@ export const Home = withDataAndState(
     return (
       <div className={containerSettings}>
         <div className="grid grid-cols-3 gap-5">
-          {mockData?.map((item) => (
+          {data?.data?.products?.map((item) => (
             <ProductCard
               key={item.id}
               {...item}

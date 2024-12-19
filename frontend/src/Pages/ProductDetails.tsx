@@ -5,12 +5,13 @@ import { OptionsRadio } from "../components/Radio";
 import { cn } from "../utils";
 import { withDataAndState } from "./_Template";
 import { useParams } from "react-router-dom";
+import parse from "html-react-parser";
 
 export const ProductDetails = withDataAndState(
-  ({ mockData, addToCartFn, state }) => {
+  ({ data, addToCartFn, state }) => {
     const { id } = useParams();
 
-    const product = mockData?.find((p) => p.id === id);
+    const product = data?.data?.products?.find((p) => p.id === id);
     const currency = product?.prices?.find(
       (item) => item.currency.label === "USD",
     );
@@ -84,6 +85,12 @@ export const ProductDetails = withDataAndState(
                 This product is already in your cart. You can add another one if
                 you'd like.
               </p>
+            )}
+            {product?.description && (
+              <div className="">
+                <div className="text-xl my-2 font-semibold">Description</div>
+                {parse(product?.description || "")}
+              </div>
             )}
           </div>
         </div>

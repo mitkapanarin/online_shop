@@ -34,7 +34,7 @@ export const ImageGallery = ({ gallery }: Pick<IProduct, "gallery">) => {
           onClick={handleMainImageClick}
         ></div>
       )}
-      <div className="flex gap-5 relative">
+      <div className="flex gap-5 relative" data-testid="product-gallery">
         <div className="flex flex-col w-[260px] gap-2">
           {gallery.map((img, index) => (
             <img

@@ -69,6 +69,14 @@ export const withDataAndState = <P extends object>(
       isError,
     };
 
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
+    if (isError) {
+      return <div>Error...</div>;
+    }
+
     return <WithStateComponent {...props} {...dataProps} />;
   };
 };

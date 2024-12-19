@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "../../utils";
 import { IAttribute } from "../../_Types";
+import { toKebabCase } from "../Text";
 
 interface OptionsRadioProps extends IAttribute {
   variant: "small" | "large";
@@ -78,7 +79,10 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
   };
 
   return (
-    <div className={sizeClass}>
+    <div
+      className={sizeClass}
+      data-testid={`product-attribute-${toKebabCase(name)}`}
+    >
       <h3 className={cn(`font-semibold my-2 text-slate-600`, sizeClass)}>
         {name} :
       </h3>

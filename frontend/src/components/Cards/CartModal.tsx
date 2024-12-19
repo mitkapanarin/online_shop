@@ -4,7 +4,7 @@ import { CartCard } from "./CartCard";
 
 export const CartModal = withDataAndState(
   ({
-    mockData,
+    data,
     state,
     resetCart,
     totalAmountInCart,
@@ -23,7 +23,7 @@ export const CartModal = withDataAndState(
             <h3 className="text-center">Cart is empty</h3>
           )}
           {cartState?.map((item) => {
-            const product = mockData?.find((p) => p.id === item.id);
+            const product = data?.data?.products?.find((p) => p.id === item.id);
             if (!product) {
               return null;
             }
