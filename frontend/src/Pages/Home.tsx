@@ -10,6 +10,7 @@ export const Home = withDataAndState(
     addToCartFn,
     removeFromCartFn,
     updateCartItemQuantityFn,
+    updateCartItemAttributeFn,
   }) => {
     if (isLoading) {
       return <div>Loading...</div>;
@@ -28,6 +29,7 @@ export const Home = withDataAndState(
               addToCartFn={addToCartFn}
               removeFromCartFn={removeFromCartFn}
               updateCartItemQuantityFn={updateCartItemQuantityFn}
+              updateCartItemAttributeFn={updateCartItemAttributeFn}
             />
           ))}
         </div>
