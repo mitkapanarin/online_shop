@@ -2,6 +2,27 @@
 
 This project showcases my skills in full stack development, handling dynamic data, and designing user interfaces.
 
+## Local Setup Instructions
+
+### Frontend Server
+
+```terminal
+cd frontend
+npm install
+npm run dev
+```
+
+create a file named `.env`, copy all contents of `.sample.env`
+and put it on the `.env`
+
+### Backend Server
+
+```terminal
+cd backend
+composer install
+php -S localhost:8000
+```
+
 ## Backend
 
 PHP
