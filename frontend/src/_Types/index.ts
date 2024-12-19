@@ -81,7 +81,7 @@ export interface ICartItemFunctions {
 export type IProductCard = IProduct & ICartItemFunctions;
 
 export type DataProps = {
-  data: IProduct[];
+  data: IDataFetch;
   mockData: IProduct[];
   isLoading: boolean;
   isError: boolean;

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { DataProps, ICartItem, StateProps } from "../../_Types";
+import { DataProps, ICartItem, IDataFetch, StateProps } from "../../_Types";
 import { mockData } from "../../components/MockData";
 import {
   addItemToCart,
@@ -8,6 +8,7 @@ import {
   resetCart,
   updateCartItemAttribute,
   updateCartItemQuantity,
+  useGetAllProductsQuery,
 } from "../../store";
 
 export const withState = <P extends object>(
@@ -57,13 +58,15 @@ export const withDataAndState = <P extends object>(
   WrappedComponent: React.ComponentType<P & DataProps & StateProps>,
 ) => {
   const WithStateComponent = withState(WrappedComponent);
-
   return (props: P) => {
+    const { data, isError, isFetching, isLoading } = useGetAllProductsQuery();
+    console.log("data", data);
+
     const dataProps: DataProps = {
       mockData,
-      data: [],
-      isLoading: false,
-      isError: false,
+      data: data as IDataFetch,
+      isLoading: isFetching || isLoading,
+      isError,
     };
 
     return <WithStateComponent {...props} {...dataProps} />;

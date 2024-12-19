@@ -93,6 +93,7 @@ class GraphQLController
             'fields' => [
                 'id' => ['type' => Type::string()],
                 'name' => ['type' => Type::string()],
+                'category' => ['type' => Type::string()],
                 'instock' => ['type' => Type::boolean()],
                 'gallery' => ['type' => Type::listOf(Type::string())],
                 'prices' => ['type' => Type::listOf($this->getPriceType())],
