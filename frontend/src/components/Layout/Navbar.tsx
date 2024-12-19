@@ -57,7 +57,7 @@ export const Navbar: React.FC = () => {
               Tech
             </Link>
           </div>
-          <div className="">Logo</div>
+          <img src="/store-logo.svg" alt="" />
           <button
             className=""
             data-testid="cart-btn"
