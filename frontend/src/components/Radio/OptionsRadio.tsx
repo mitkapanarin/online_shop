@@ -39,6 +39,7 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
               selectedItemId !== item?.id,
           })}
           onClick={() => item?.id && handleItemClick(item.id)}
+          data-testid={`product-attribute-${toKebabCase(name)}-${toKebabCase(item?.displayValue)}`}
         >
           {item?.displayValue}
         </button>
@@ -60,6 +61,7 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
           style={{ backgroundColor: item?.value }}
           onClick={() => item?.id && handleItemClick(item.id)}
           title={item?.displayValue}
+          data-testid={`product-attribute-${toKebabCase(name)}-${toKebabCase(item?.displayValue)}`}
         >
           {selectedItemId === item?.id && (
             <span
@@ -79,10 +81,7 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
   };
 
   return (
-    <div
-      className={sizeClass}
-      data-testid={`product-attribute-${toKebabCase(name)}`}
-    >
+    <div className={sizeClass}>
       <h3 className={cn(`font-semibold my-2 text-slate-600`, sizeClass)}>
         {name} :
       </h3>

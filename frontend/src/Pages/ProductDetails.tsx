@@ -77,6 +77,7 @@ export const ProductDetails = withDataAndState(
             <button
               className="bg-emerald-400 text-white px-6 py-2 rounded-md hover:bg-emerald-500 transition-colors duration-200 ease-in-out"
               onClick={handleAddToCart}
+              data-testid="add-to-cart"
             >
               {isInCart ? "Add Another to Cart" : "Add to Cart"}
             </button>
@@ -87,7 +88,7 @@ export const ProductDetails = withDataAndState(
               </p>
             )}
             {product?.description && (
-              <div className="">
+              <div className="" data-testid="product-description">
                 <div className="text-xl my-2 font-semibold">Description</div>
                 {parse(product?.description || "")}
               </div>
