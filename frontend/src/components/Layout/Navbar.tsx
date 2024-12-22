@@ -17,9 +17,7 @@ export const Navbar: React.FC = () => {
       : "text-black";
 
   const addDataTestIdFn = (route: string) =>
-    currentPath === route
-      ? "active-category-link category-link"
-      : "category-link";
+    currentPath === route ? "active-category-link" : "category-link";
 
   const [modalState, setModalState] = React.useState<boolean>(false);
 
@@ -30,6 +28,7 @@ export const Navbar: React.FC = () => {
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setModalState(false)}
+          data-testid="cart-overlay"
         ></div>
       )}
       <div className={`relative ${containerSettings}`}>
