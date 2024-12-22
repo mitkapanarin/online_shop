@@ -39,7 +39,7 @@ export const OptionsRadio: React.FC<OptionsRadioProps> = ({
               selectedItemId !== item?.id,
           })}
           onClick={() => item?.id && handleItemClick(item.id)}
-          data-testid={`product-attribute-${toKebabCase(name)}-${toKebabCase(item?.displayValue)}`}
+          data-testid={`product-attribute-${toKebabCase(name)}-${item?.displayValue}`}
         >
           {item?.displayValue}
         </button>
