@@ -36,9 +36,9 @@ export const Navbar: React.FC = () => {
         <div className={`flex justify-between items-center my-4`}>
           <div className="uppercase flex gap-6">
             <Link
-              to="/"
-              data-testid={addDataTestIdFn("/")}
-              className={pathDetector("/")}
+              to="/all"
+              data-testid={addDataTestIdFn("/all")}
+              className={pathDetector("/all")}
             >
               All
             </Link>
