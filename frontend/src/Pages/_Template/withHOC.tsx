@@ -60,7 +60,6 @@ export const withDataAndState = <P extends object>(
   const WithStateComponent = withState(WrappedComponent);
   return (props: P) => {
     const { data, isError, isFetching, isLoading } = useGetAllProductsQuery();
-    console.log("data", data);
 
     const dataProps: DataProps = {
       mockData,

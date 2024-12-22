@@ -12,7 +12,6 @@ export const CartModal = withDataAndState(
     updateCartItemAttributeFn,
   }) => {
     const cartState = state.cart.cart;
-    console.log("cartState: ", cartState);
     return (
       <div
         data-testid="cart-total"
