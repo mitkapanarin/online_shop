@@ -64,14 +64,16 @@ export const Navbar: React.FC = () => {
             </Link>
           </div>
           <img src="/store-logo.svg" alt="" />
-          <button
-            className=""
-            data-testid="cart-btn"
-            onClick={() => setModalState(!modalState)}
-          >
-            <HiOutlineShoppingCart className="cursor-pointer" />
-            <span>{cart ? cart.length : 0}</span>
-          </button>
+          <div data-testid="cart-btn-container">
+            <button
+              className="cart-btn"
+              data-testid="cart-btn"
+              onClick={() => setModalState(!modalState)}
+            >
+              <HiOutlineShoppingCart className="cursor-pointer" />
+              <span>{cart ? cart.length : 0}</span>
+            </button>
+          </div>
         </div>
         {modalState && (
           <div className="relative z-50">
