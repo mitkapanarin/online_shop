@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { containerSettings } from "../_Constants";
 import { ImageGallery } from "../components/ImageGallery";
 import { OptionsRadio } from "../components/Radio";
@@ -10,6 +10,7 @@ import parse from "html-react-parser";
 export const ProductDetails = withDataAndState(
   ({ data, addToCartFn, state }) => {
     const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
 
     const product = data?.data?.products?.find((p) => p.id === id);
     const currency = product?.prices?.find(
@@ -50,6 +51,16 @@ export const ProductDetails = withDataAndState(
       setSelectedAttributes({});
     };
 
+    useEffect(() => {
+      if (product) {
+        setIsLoading(false);
+      }
+    }, [product]);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
     return (
       <div className={cn(containerSettings)}>
         <div className="grid grid-cols-2 gap-10">
@@ -75,16 +86,30 @@ export const ProductDetails = withDataAndState(
               </h6>
             </div>
             <button
-              className="bg-emerald-400 text-white px-6 py-2 rounded-md hover:bg-emerald-500 transition-colors duration-200 ease-in-out"
+              className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
+                product?.instock !== false
+                  ? "hover:bg-emerald-500"
+                  : "opacity-50 cursor-not-allowed"
+              }`}
               onClick={handleAddToCart}
+              disabled={product?.instock === false}
               data-testid="add-to-cart"
             >
-              {isInCart ? "Add Another to Cart" : "Add to Cart"}
+              {product?.instock !== false
+                ? isInCart
+                  ? "Add Another to Cart"
+                  : "Add to Cart"
+                : "Out of Stock"}
             </button>
-            {isInCart && (
+            {isInCart && product?.instock !== false && (
               <p className="text-emerald-600 mt-3">
                 This product is already in your cart. You can add another one if
                 you'd like.
+              </p>
+            )}
+            {product?.instock === false && (
+              <p className="text-red-600 mt-3">
+                This product is currently out of stock.
               </p>
             )}
             {product?.description && (
