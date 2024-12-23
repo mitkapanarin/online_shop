@@ -11,6 +11,7 @@ export const ProductDetails = withDataAndState(
   ({ data, addToCartFn, state }) => {
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const product = data?.data?.products?.find((p) => p.id === id);
     const currency = product?.prices?.find(
@@ -52,22 +53,37 @@ export const ProductDetails = withDataAndState(
     };
 
     useEffect(() => {
-      if (product) {
-        setIsLoading(false);
+      if (data?.data?.products) {
+        if (product) {
+          setIsLoading(false);
+        } else {
+          setError("Product not found");
+          setIsLoading(false);
+        }
       }
-    }, [product]);
+    }, [data, product]);
 
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <div data-testid="loading-indicator">Loading...</div>;
     }
+
+    if (error) {
+      return <div data-testid="error-message">{error}</div>;
+    }
+
+    if (!product) {
+      return <div data-testid="not-found-message">Product not found</div>;
+    }
+
+    const isOutOfStock = product.instock === false;
 
     return (
       <div className={cn(containerSettings)}>
         <div className="grid grid-cols-2 gap-10">
-          <ImageGallery gallery={product?.gallery || []} />
+          <ImageGallery gallery={product.gallery || []} />
           <div className="">
-            <h2 className="text-xl font-bold">{product?.name}</h2>
-            {product?.attributes?.map((item, index) => (
+            <h2 className="text-xl font-bold">{product.name}</h2>
+            {product.attributes?.map((item, index) => (
               <OptionsRadio
                 key={index}
                 {...item}
@@ -87,35 +103,38 @@ export const ProductDetails = withDataAndState(
             </div>
             <button
               className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-                product?.instock !== false
-                  ? "hover:bg-emerald-500"
-                  : "opacity-50 cursor-not-allowed"
+                isOutOfStock
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-emerald-500"
               }`}
               onClick={handleAddToCart}
-              disabled={product?.instock === false}
+              disabled={isOutOfStock}
               data-testid="add-to-cart"
             >
-              {product?.instock !== false
-                ? isInCart
+              {isOutOfStock
+                ? "Out of Stock"
+                : isInCart
                   ? "Add Another to Cart"
-                  : "Add to Cart"
-                : "Out of Stock"}
+                  : "Add to Cart"}
             </button>
-            {isInCart && product?.instock !== false && (
+            {isInCart && !isOutOfStock && (
               <p className="text-emerald-600 mt-3">
                 This product is already in your cart. You can add another one if
                 you'd like.
               </p>
             )}
-            {product?.instock === false && (
-              <p className="text-red-600 mt-3">
+            {isOutOfStock && (
+              <p
+                className="text-red-600 mt-3"
+                data-testid="out-of-stock-message"
+              >
                 This product is currently out of stock.
               </p>
             )}
-            {product?.description && (
+            {product.description && (
               <div className="" data-testid="product-description">
                 <div className="text-xl my-2 font-semibold">Description</div>
-                {parse(product?.description || "")}
+                {parse(product.description)}
               </div>
             )}
           </div>
