@@ -65,7 +65,7 @@ export const ProductDetails = withDataAndState(
     const isOutOfStock = product?.instock === false;
 
     const renderAddToCartButton = () => {
-      const isDisabled = isLoading || isOutOfStock;
+      const isDisabled = isLoading || !product || isOutOfStock;
       return (
         <button
           className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
@@ -77,16 +77,18 @@ export const ProductDetails = withDataAndState(
           disabled={isDisabled}
           data-testid="add-to-cart"
           data-loading={isLoading.toString()}
-          data-out-of-stock={isOutOfStock.toString()}
+          data-out-of-stock={(isOutOfStock || !product).toString()}
           data-in-cart={isInCart.toString()}
         >
           {isLoading
             ? "Loading..."
-            : isOutOfStock
-              ? "Out of Stock"
-              : isInCart
-                ? "Add Another to Cart"
-                : "Add to Cart"}
+            : !product
+              ? "Product Unavailable"
+              : isOutOfStock
+                ? "Out of Stock"
+                : isInCart
+                  ? "Add Another to Cart"
+                  : "Add to Cart"}
         </button>
       );
     };
