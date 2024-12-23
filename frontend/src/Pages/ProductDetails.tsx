@@ -76,19 +76,12 @@ export const ProductDetails = withDataAndState(
           onClick={handleAddToCart}
           disabled={isDisabled}
           data-testid="add-to-cart"
-          data-loading={isLoading.toString()}
-          data-out-of-stock={(isOutOfStock || !product).toString()}
-          data-in-cart={isInCart.toString()}
         >
           {isLoading
             ? "Loading..."
-            : !product
-              ? "Product Unavailable"
-              : isOutOfStock
-                ? "Out of Stock"
-                : isInCart
-                  ? "Add Another to Cart"
-                  : "Add to Cart"}
+            : !product || isOutOfStock
+              ? "Out of Stock"
+              : "Add to Cart"}
         </button>
       );
     };
