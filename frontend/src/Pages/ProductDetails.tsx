@@ -1,31 +1,40 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import parse from "html-react-parser";
 import { containerSettings } from "../_Constants";
 import { ImageGallery } from "../components/ImageGallery";
 import { OptionsRadio } from "../components/Radio";
 import { cn } from "../utils";
 import { withDataAndState } from "./_Template";
-import { useParams } from "react-router-dom";
-import parse from "html-react-parser";
 
 export const ProductDetails = withDataAndState(
   ({ data, addToCartFn, state }) => {
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedAttributes, setSelectedAttributes] = useState<
+      Record<string, string>
+    >({});
 
     const product = data?.data?.products?.find((p) => p.id === id);
     const currency = product?.prices?.find(
       (item) => item.currency.label === "USD",
     );
-
     const currencySymbol = currency?.currency.symbol;
     const productPrice = currency?.amount;
-
-    const [selectedAttributes, setSelectedAttributes] = useState<
-      Record<string, string>
-    >({});
-
     const isInCart = state.cart.cart.some((item) => item.id === id);
+    const isOutOfStock = product?.instock === false;
+
+    useEffect(() => {
+      if (data?.data?.products) {
+        if (product) {
+          setIsLoading(false);
+        } else {
+          setError("Product not found");
+          setIsLoading(false);
+        }
+      }
+    }, [data, product]);
 
     const handleAttributeChange = (
       attributeId: string,
@@ -51,21 +60,8 @@ export const ProductDetails = withDataAndState(
       setSelectedAttributes({});
     };
 
-    useEffect(() => {
-      if (data?.data?.products) {
-        if (product) {
-          setIsLoading(false);
-        } else {
-          setError("Product not found");
-          setIsLoading(false);
-        }
-      }
-    }, [data, product]);
-
-    const isOutOfStock = product?.instock === false;
-
     const renderAddToCartButton = () => {
-      const isDisabled = isLoading || !product || isOutOfStock;
+      const isDisabled = !product || isOutOfStock;
       return (
         <button
           className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
@@ -76,12 +72,17 @@ export const ProductDetails = withDataAndState(
           onClick={handleAddToCart}
           disabled={isDisabled}
           data-testid="add-to-cart"
+          data-loading={isLoading.toString()}
+          data-out-of-stock={(isOutOfStock || !product).toString()}
+          data-in-cart={isInCart.toString()}
         >
-          {isLoading
-            ? "Loading..."
-            : !product || isOutOfStock
+          {!product
+            ? "Product Unavailable"
+            : isOutOfStock
               ? "Out of Stock"
-              : "Add to Cart"}
+              : isInCart
+                ? "Add Another to Cart"
+                : "Add to Cart"}
         </button>
       );
     };
@@ -99,12 +100,17 @@ export const ProductDetails = withDataAndState(
             {product?.instock?.toString() || "null"}
           </span>
         </div>
+
         {renderAddToCartButton()}
+
         {isLoading && <div data-testid="loading-indicator">Loading...</div>}
+
         {error && <div data-testid="error-message">{error}</div>}
+
         {!isLoading && !error && !product && (
           <div data-testid="not-found-message">Product not found</div>
         )}
+
         {product && (
           <div className="grid grid-cols-2 gap-10">
             <ImageGallery gallery={product.gallery || []} />
