@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { containerSettings } from "../../_Constants";
@@ -20,6 +20,12 @@ export const Navbar: React.FC = () => {
     currentPath === route ? "active-category-link" : "category-link";
 
   const [modalState, setModalState] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      setModalState(true);
+    }
+  }, [cart]);
 
   return (
     <>
