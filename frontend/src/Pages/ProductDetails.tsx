@@ -27,13 +27,15 @@ export const ProductDetails = withDataAndState(
     const currencySymbol = currency?.currency.symbol;
     const productPrice = currency?.amount;
     const isInCart = state.cart.cart.some((item) => item.id === id);
-    const isOutOfStock = product?.instock === false;
+    const [isOutOfStock, setIsOutOfStock] = useState(false);
 
     useEffect(() => {
       if (data?.data?.products) {
         setIsLoading(false);
+        const foundProduct = data.data.products.find((p) => p.id === id);
+        setIsOutOfStock(foundProduct?.instock === false);
       }
-    }, [data]);
+    }, [data, id]);
 
     const handleAttributeChange = (
       attributeId: string,
@@ -95,22 +97,28 @@ export const ProductDetails = withDataAndState(
                     {currencySymbol} {productPrice}
                   </h6>
                 </div>
-                <button
-                  className={`text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-                    isOutOfStock
-                      ? "bg-red-400 hover:bg-red-500"
-                      : "bg-emerald-400 hover:bg-emerald-500"
-                  }`}
-                  onClick={handleAddToCart}
-                  disabled={isOutOfStock}
-                  data-testid="add-to-cart"
-                >
-                  {isOutOfStock
-                    ? "Out of Stock"
-                    : isInCart
-                      ? "Add Another to Cart"
-                      : "Add to Cart"}
-                </button>
+                {isLoading ? (
+                  <div data-testid="loading-button">Loading...</div>
+                ) : (
+                  <button
+                    className={`text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
+                      isOutOfStock
+                        ? "bg-red-400 hover:bg-red-500"
+                        : "bg-emerald-400 hover:bg-emerald-500"
+                    }`}
+                    onClick={handleAddToCart}
+                    disabled={isOutOfStock}
+                    data-testid={
+                      isOutOfStock ? "add-to-cart-disabled" : "add-to-cart"
+                    }
+                  >
+                    {isOutOfStock
+                      ? "Out of Stock"
+                      : isInCart
+                        ? "Add Another to Cart"
+                        : "Add to Cart"}
+                  </button>
+                )}
                 {isInCart && !isOutOfStock && (
                   <p className="text-emerald-600 mt-3">
                     This product is already in your cart. You can add another
