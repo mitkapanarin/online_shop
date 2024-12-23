@@ -53,53 +53,58 @@ export const ProductDetails = withDataAndState(
     };
 
     useEffect(() => {
-      console.log("Effect running, data:", data);
       if (data?.data?.products) {
         if (product) {
-          console.log("Product found:", product);
           setIsLoading(false);
         } else {
-          console.log("Product not found");
           setError("Product not found");
           setIsLoading(false);
         }
       }
     }, [data, product]);
 
-    console.log(
-      "Rendering, isLoading:",
-      isLoading,
-      "error:",
-      error,
-      "product:",
-      product,
-    );
-
     const isOutOfStock = product?.instock === false;
 
-    const renderAddToCartButton = () => (
-      <button
-        className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-          isLoading || isOutOfStock
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-emerald-500"
-        }`}
-        onClick={handleAddToCart}
-        disabled={isLoading || isOutOfStock}
-        data-testid="add-to-cart"
-      >
-        {isLoading
-          ? "Loading..."
-          : isOutOfStock
-            ? "Out of Stock"
-            : isInCart
-              ? "Add Another to Cart"
-              : "Add to Cart"}
-      </button>
-    );
+    const renderAddToCartButton = () => {
+      const isDisabled = isLoading || isOutOfStock;
+      return (
+        <button
+          className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
+            isDisabled
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-emerald-500"
+          }`}
+          onClick={handleAddToCart}
+          disabled={isDisabled}
+          data-testid="add-to-cart"
+          data-loading={isLoading}
+          data-out-of-stock={isOutOfStock}
+          data-in-cart={isInCart}
+        >
+          {isLoading
+            ? "Loading..."
+            : isOutOfStock
+              ? "Out of Stock"
+              : isInCart
+                ? "Add Another to Cart"
+                : "Add to Cart"}
+        </button>
+      );
+    };
 
     return (
-      <div className={cn(containerSettings)}>
+      <div
+        className={cn(containerSettings)}
+        data-testid="product-details-container"
+      >
+        <div hidden>
+          <span data-testid="product-loading">{isLoading.toString()}</span>
+          <span data-testid="product-error">{error || "null"}</span>
+          <span data-testid="product-id">{product?.id || "null"}</span>
+          <span data-testid="product-instock">
+            {product?.instock?.toString() || "null"}
+          </span>
+        </div>
         {isLoading && <div data-testid="loading-indicator">Loading...</div>}
         {error && <div data-testid="error-message">{error}</div>}
         {!isLoading && !error && !product && (
