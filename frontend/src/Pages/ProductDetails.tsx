@@ -48,7 +48,6 @@ export const ProductDetails = withDataAndState(
           }),
         ),
       });
-      // Reset selected attributes
       setSelectedAttributes({});
     };
 
@@ -77,9 +76,9 @@ export const ProductDetails = withDataAndState(
           onClick={handleAddToCart}
           disabled={isDisabled}
           data-testid="add-to-cart"
-          data-loading={isLoading}
-          data-out-of-stock={isOutOfStock}
-          data-in-cart={isInCart}
+          data-loading={isLoading.toString()}
+          data-out-of-stock={isOutOfStock.toString()}
+          data-in-cart={isInCart.toString()}
         >
           {isLoading
             ? "Loading..."
@@ -105,6 +104,7 @@ export const ProductDetails = withDataAndState(
             {product?.instock?.toString() || "null"}
           </span>
         </div>
+        {renderAddToCartButton()}
         {isLoading && <div data-testid="loading-indicator">Loading...</div>}
         {error && <div data-testid="error-message">{error}</div>}
         {!isLoading && !error && !product && (
@@ -133,7 +133,6 @@ export const ProductDetails = withDataAndState(
                   {currencySymbol} {productPrice}
                 </h6>
               </div>
-              {renderAddToCartButton()}
               {isInCart && !isOutOfStock && (
                 <p className="text-emerald-600 mt-3">
                   This product is already in your cart. You can add another one
