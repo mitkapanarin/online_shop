@@ -97,6 +97,10 @@ export const ProductDetails = withDataAndState(
                     {currencySymbol} {productPrice}
                   </h6>
                 </div>
+                <div className="text-sm text-gray-500 mb-2">
+                  Debug: isLoading={isLoading.toString()}, isOutOfStock=
+                  {isOutOfStock.toString()}, productId={id}
+                </div>
                 {isLoading ? (
                   <div data-testid="loading-button">Loading...</div>
                 ) : (
