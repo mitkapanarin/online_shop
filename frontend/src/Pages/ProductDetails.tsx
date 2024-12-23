@@ -47,44 +47,19 @@ export const ProductDetails = withDataAndState(
     };
 
     const handleAddToCart = () => {
-      addToCartFn({
-        id: id!,
-        quantity: 1,
-        attributes: Object.entries(selectedAttributes).map(
-          ([attributeId, attributeItemId]) => ({
-            attributeId,
-            attributeItemId,
-          }),
-        ),
-      });
-      setSelectedAttributes({});
-    };
-
-    const renderAddToCartButton = () => {
-      const isDisabled = !product || isOutOfStock;
-      return (
-        <button
-          className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-            isDisabled
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-emerald-500"
-          }`}
-          onClick={handleAddToCart}
-          disabled={isDisabled}
-          data-testid="add-to-cart"
-          data-loading={isLoading.toString()}
-          data-out-of-stock={(isOutOfStock || !product).toString()}
-          data-in-cart={isInCart.toString()}
-        >
-          {!product
-            ? "Product Unavailable"
-            : isOutOfStock
-              ? "Out of Stock"
-              : isInCart
-                ? "Add Another to Cart"
-                : "Add to Cart"}
-        </button>
-      );
+      if (product && !isOutOfStock) {
+        addToCartFn({
+          id: id!,
+          quantity: 1,
+          attributes: Object.entries(selectedAttributes).map(
+            ([attributeId, attributeItemId]) => ({
+              attributeId,
+              attributeItemId,
+            }),
+          ),
+        });
+        setSelectedAttributes({});
+      }
     };
 
     return (
@@ -101,7 +76,26 @@ export const ProductDetails = withDataAndState(
           </span>
         </div>
 
-        {renderAddToCartButton()}
+        <button
+          className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
+            isLoading || !product || isOutOfStock
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-emerald-500"
+          }`}
+          onClick={handleAddToCart}
+          disabled={isLoading || !product || isOutOfStock}
+          data-testid="add-to-cart"
+        >
+          {isLoading
+            ? "Loading..."
+            : !product
+              ? "Product Unavailable"
+              : isOutOfStock
+                ? "Out of Stock"
+                : isInCart
+                  ? "Add Another to Cart"
+                  : "Add to Cart"}
+        </button>
 
         {isLoading && <div data-testid="loading-indicator">Loading...</div>}
 
