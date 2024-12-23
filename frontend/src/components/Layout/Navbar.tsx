@@ -83,6 +83,22 @@ export const Navbar: React.FC = () => {
               <HiOutlineShoppingCart className="cursor-pointer" />
               <span>{cart ? cart.length : 0}</span>
             </button>
+            {cart && cart.length > 0 && (
+              <div
+                data-testid="cart-summary"
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  right: 0,
+                  backgroundColor: "white",
+                  padding: "5px",
+                  border: "1px solid #ccc",
+                  zIndex: 42,
+                }}
+              >
+                {cart.length === 1 ? "1 item" : `${cart.length} items`}
+              </div>
+            )}
           </div>
         </div>
         {modalState && (
