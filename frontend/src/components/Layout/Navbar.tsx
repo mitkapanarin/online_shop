@@ -23,16 +23,16 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* Overlay */}
-      {modalState && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={() => setModalState(false)}
-          data-testid="cart-overlay"
-        ></div>
-      )}
       <div className={`relative ${containerSettings}`}>
         <div className={`flex justify-between items-center my-4`}>
+          {modalState && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setModalState(false)}
+              data-testid="cart-overlay"
+              style={{ zIndex: 30 }}
+            ></div>
+          )}
           <div className="uppercase flex gap-6">
             <Link
               to="/"
@@ -64,11 +64,15 @@ export const Navbar: React.FC = () => {
             </Link>
           </div>
           <img src="/store-logo.svg" alt="" />
-          <div data-testid="cart-btn-container">
+          <div
+            data-testid="cart-btn-container"
+            style={{ position: "relative", zIndex: 40 }}
+          >
             <button
               className="cart-btn"
               data-testid="cart-btn"
               onClick={() => setModalState(!modalState)}
+              style={{ position: "relative", zIndex: 41 }}
             >
               <HiOutlineShoppingCart className="cursor-pointer" />
               <span>{cart ? cart.length : 0}</span>
