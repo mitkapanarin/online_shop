@@ -1,30 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import parse from "html-react-parser";
 import { containerSettings } from "../_Constants";
 import { ImageGallery } from "../components/ImageGallery";
 import { OptionsRadio } from "../components/Radio";
 import { cn } from "../utils";
 import { withDataAndState } from "./_Template";
-import { useParams } from "react-router-dom";
-import parse from "html-react-parser";
 
 export const ProductDetails = withDataAndState(
   ({ data, addToCartFn, state }) => {
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(true);
-
-    const product = data?.data?.products?.find((p) => p.id === id);
-    const currency = product?.prices?.find(
-      (item) => item.currency.label === "USD",
-    );
-
-    const currencySymbol = currency?.currency.symbol;
-    const productPrice = currency?.amount;
-
     const [selectedAttributes, setSelectedAttributes] = useState<
       Record<string, string>
     >({});
 
+    const product = useMemo(
+      () => data?.data?.products?.find((p) => p.id === id),
+      [data, id],
+    );
+    const currency = useMemo(
+      () => product?.prices?.find((item) => item.currency.label === "USD"),
+      [product],
+    );
+
+    const currencySymbol = currency?.currency.symbol;
+    const productPrice = currency?.amount;
     const isInCart = state.cart.cart.some((item) => item.id === id);
+    const isOutOfStock = product?.instock === false;
+
+    useEffect(() => {
+      if (product) {
+        setIsLoading(false);
+      }
+    }, [product]);
 
     const handleAttributeChange = (
       attributeId: string,
@@ -47,27 +56,20 @@ export const ProductDetails = withDataAndState(
           }),
         ),
       });
-      // Reset selected attributes
       setSelectedAttributes({});
     };
 
-    useEffect(() => {
-      if (product) {
-        setIsLoading(false);
-      }
-    }, [product]);
-
-    if (isLoading) {
+    if (isLoading || !product) {
       return <div>Loading...</div>;
     }
 
     return (
       <div className={cn(containerSettings)}>
         <div className="grid grid-cols-2 gap-10">
-          <ImageGallery gallery={product?.gallery || []} />
-          <div className="">
-            <h2 className="text-xl font-bold">{product?.name}</h2>
-            {product?.attributes?.map((item, index) => (
+          <ImageGallery gallery={product.gallery || []} />
+          <div>
+            <h2 className="text-xl font-bold">{product.name}</h2>
+            {product.attributes?.map((item, index) => (
               <OptionsRadio
                 key={index}
                 {...item}
@@ -87,35 +89,35 @@ export const ProductDetails = withDataAndState(
             </div>
             <button
               className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-                product?.instock !== false
-                  ? "hover:bg-emerald-500"
-                  : "opacity-50 cursor-not-allowed"
+                isOutOfStock
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-emerald-500"
               }`}
               onClick={handleAddToCart}
-              disabled={product?.instock === false}
+              disabled={isOutOfStock}
               data-testid="add-to-cart"
             >
-              {product?.instock !== false
-                ? isInCart
+              {isOutOfStock
+                ? "Out of Stock"
+                : isInCart
                   ? "Add Another to Cart"
-                  : "Add to Cart"
-                : "Out of Stock"}
+                  : "Add to Cart"}
             </button>
-            {isInCart && product?.instock !== false && (
+            {isInCart && !isOutOfStock && (
               <p className="text-emerald-600 mt-3">
                 This product is already in your cart. You can add another one if
                 you'd like.
               </p>
             )}
-            {product?.instock === false && (
+            {isOutOfStock && (
               <p className="text-red-600 mt-3">
                 This product is currently out of stock.
               </p>
             )}
-            {product?.description && (
-              <div className="" data-testid="product-description">
+            {product.description && (
+              <div data-testid="product-description">
                 <div className="text-xl my-2 font-semibold">Description</div>
-                {parse(product?.description || "")}
+                {parse(product.description)}
               </div>
             )}
           </div>
