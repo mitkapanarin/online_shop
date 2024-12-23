@@ -59,9 +59,15 @@ export const ProductDetails = withDataAndState(
       setSelectedAttributes({});
     };
 
-    if (isLoading || !product) {
+    if (isLoading) {
       return <div>Loading...</div>;
     }
+
+    if (!product) {
+      return <div>Product not found</div>;
+    }
+
+    const isButtonDisabled = isLoading || isOutOfStock;
 
     return (
       <div className={cn(containerSettings)}>
@@ -89,13 +95,15 @@ export const ProductDetails = withDataAndState(
             </div>
             <button
               className={`bg-emerald-400 text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-                isOutOfStock
+                isButtonDisabled
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-emerald-500"
               }`}
               onClick={handleAddToCart}
-              disabled={isOutOfStock}
+              disabled={isButtonDisabled}
               data-testid="add-to-cart"
+              data-loading={isLoading}
+              data-outofstock={isOutOfStock}
             >
               {isOutOfStock
                 ? "Out of Stock"
