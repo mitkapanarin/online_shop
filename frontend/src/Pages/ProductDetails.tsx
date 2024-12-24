@@ -14,7 +14,6 @@ export const ProductDetails = withDataAndState(
     const [selectedAttributes, setSelectedAttributes] = useState<
       Record<string, string>
     >({});
-
     const product = useMemo(
       () => data?.data?.products?.find((p) => p.id === id),
       [data, id],
@@ -23,7 +22,6 @@ export const ProductDetails = withDataAndState(
       () => product?.prices?.find((item) => item.currency.label === "USD"),
       [product],
     );
-
     const currencySymbol = currency?.currency.symbol;
     const productPrice = currency?.amount;
     const isInCart = state.cart.cart.some((item) => item.id === id);
@@ -110,14 +108,16 @@ export const ProductDetails = withDataAndState(
                   : "bg-emerald-400 hover:bg-emerald-500"
               }`}
               onClick={handleAddToCart}
-              disabled={isOutOfStock}
+              disabled={isOutOfStock || isLoading}
               data-testid="add-to-cart"
             >
-              {isOutOfStock
-                ? "Out of Stock"
-                : isInCart
-                  ? "Add Another to Cart"
-                  : "Add to Cart"}
+              {isLoading
+                ? "Loading..."
+                : isOutOfStock
+                  ? "Out of Stock"
+                  : isInCart
+                    ? "Add Another to Cart"
+                    : "Add to Cart"}
             </button>
             {isInCart && !isOutOfStock && !isLoading && (
               <p className="text-emerald-600 mt-3">
