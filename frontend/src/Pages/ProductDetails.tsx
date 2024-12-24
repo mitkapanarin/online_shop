@@ -14,33 +14,33 @@ export const ProductDetails = withDataAndState(
     const [selectedAttributes, setSelectedAttributes] = useState<
       Record<string, string>
     >({});
-    const [isDataReady, setIsDataReady] = useState(false);
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [isOutOfStock, setIsOutOfStock] = useState(false);
+
     const product = useMemo(
       () => data?.data?.products?.find((p) => p.id === id),
       [data, id],
     );
+
     const currency = useMemo(
       () => product?.prices?.find((item) => item.currency.label === "USD"),
       [product],
     );
+
     const currencySymbol = currency?.currency.symbol;
     const productPrice = currency?.amount;
     const isInCart = state.cart.cart.some((item) => item.id === id);
-    const [isOutOfStock, setIsOutOfStock] = useState(false);
+
+    const isButtonDisabled = useMemo(() => {
+      return isLoading || !product || isOutOfStock;
+    }, [isLoading, product, isOutOfStock]);
 
     useEffect(() => {
       if (data?.data?.products) {
         const foundProduct = data.data.products.find((p) => p.id === id);
-        setIsOutOfStock(foundProduct?.instock === false);
+        setIsOutOfStock(!foundProduct?.instock);
         setIsLoading(false);
-        setIsDataReady(true);
       }
     }, [data, id]);
-
-    useEffect(() => {
-      setIsButtonDisabled(!isDataReady || isOutOfStock || isLoading);
-    }, [isDataReady, isOutOfStock, isLoading]);
 
     const handleAttributeChange = (
       attributeId: string,
@@ -108,6 +108,7 @@ export const ProductDetails = withDataAndState(
             ) : (
               <div>Product not found</div>
             )}
+
             <button
               className={`text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
                 isButtonDisabled
@@ -117,6 +118,7 @@ export const ProductDetails = withDataAndState(
               onClick={handleAddToCart}
               disabled={isButtonDisabled}
               data-testid="add-to-cart"
+              aria-disabled={isButtonDisabled}
             >
               {isLoading
                 ? "Loading..."
@@ -126,23 +128,38 @@ export const ProductDetails = withDataAndState(
                     ? "Add Another to Cart"
                     : "Add to Cart"}
             </button>
+
             {isInCart && !isOutOfStock && !isLoading && (
               <p className="text-emerald-600 mt-3">
                 This product is already in your cart. You can add another one if
                 you'd like.
               </p>
             )}
+
             {isOutOfStock && !isLoading && (
               <p className="text-red-600 mt-3">
                 This product is currently out of stock.
               </p>
             )}
+
             {product?.description && !isLoading && (
               <div data-testid="product-description">
                 <div className="text-xl my-2 font-semibold">Description</div>
                 {parse(product.description)}
               </div>
             )}
+
+            {/* Debug state information (hidden) */}
+            <div style={{ display: "none" }}>
+              <span data-testid="button-state">
+                {JSON.stringify({
+                  isLoading,
+                  isOutOfStock,
+                  disabled: isButtonDisabled,
+                  productExists: !!product,
+                })}
+              </span>
+            </div>
           </div>
         </div>
       </div>
