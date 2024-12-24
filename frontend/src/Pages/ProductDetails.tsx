@@ -120,7 +120,9 @@ export const ProductDetails = withDataAndState(
                     }`}
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
-                    data-testid="add-to-cart"
+                    data-testid={
+                      isOutOfStock ? "add-to-cart-disabled" : "add-to-cart"
+                    }
                   >
                     {isOutOfStock
                       ? "Out of Stock"
