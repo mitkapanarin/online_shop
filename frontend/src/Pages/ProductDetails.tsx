@@ -31,8 +31,13 @@ export const ProductDetails = withDataAndState(
     const isInCart = state.cart.cart.some((item) => item.id === id);
 
     const isButtonDisabled = useMemo(() => {
-      return isLoading || !product || isOutOfStock;
-    }, [isLoading, product, isOutOfStock]);
+      if (isLoading || !product) return true;
+      if (isOutOfStock) return true;
+      if (product.attributes && product.attributes.length > 0) {
+        return !product.attributes.every((attr) => selectedAttributes[attr.id]);
+      }
+      return false;
+    }, [isLoading, product, isOutOfStock, selectedAttributes]);
 
     useEffect(() => {
       if (data?.data?.products) {
@@ -148,18 +153,6 @@ export const ProductDetails = withDataAndState(
                 {parse(product.description)}
               </div>
             )}
-
-            {/* Debug state information (hidden) */}
-            <div style={{ display: "none" }}>
-              <span data-testid="button-state">
-                {JSON.stringify({
-                  isLoading,
-                  isOutOfStock,
-                  disabled: isButtonDisabled,
-                  productExists: !!product,
-                })}
-              </span>
-            </div>
           </div>
         </div>
       </div>
