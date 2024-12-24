@@ -15,6 +15,7 @@ export const ProductDetails = withDataAndState(
       Record<string, string>
     >({});
     const [isDataReady, setIsDataReady] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const product = useMemo(
       () => data?.data?.products?.find((p) => p.id === id),
       [data, id],
@@ -36,6 +37,10 @@ export const ProductDetails = withDataAndState(
         setIsDataReady(true);
       }
     }, [data, id]);
+
+    useEffect(() => {
+      setIsButtonDisabled(!isDataReady || isOutOfStock || isLoading);
+    }, [isDataReady, isOutOfStock, isLoading]);
 
     const handleAttributeChange = (
       attributeId: string,
@@ -105,15 +110,15 @@ export const ProductDetails = withDataAndState(
             )}
             <button
               className={`text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-                isOutOfStock
-                  ? "bg-red-400 cursor-not-allowed"
+                isButtonDisabled
+                  ? "bg-gray-400 cursor-not-allowed"
                   : "bg-emerald-400 hover:bg-emerald-500"
               }`}
               onClick={handleAddToCart}
-              disabled={!isDataReady || isOutOfStock || isLoading}
+              disabled={isButtonDisabled}
               data-testid="add-to-cart"
             >
-              {!isDataReady || isLoading
+              {isLoading
                 ? "Loading..."
                 : isOutOfStock
                   ? "Out of Stock"
