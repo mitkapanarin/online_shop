@@ -105,23 +105,21 @@ export const ProductDetails = withDataAndState(
             )}
             <button
               className={`text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-                isOutOfStock || isLoading
+                isOutOfStock
                   ? "bg-red-400 cursor-not-allowed"
                   : "bg-emerald-400 hover:bg-emerald-500"
               }`}
               onClick={handleAddToCart}
-              disabled={isOutOfStock || isLoading}
+              disabled={isOutOfStock}
               data-testid={
                 isOutOfStock ? "add-to-cart-disabled" : "add-to-cart"
               }
             >
               {isOutOfStock
                 ? "Out of Stock"
-                : isLoading
-                  ? "Loading..."
-                  : isInCart
-                    ? "Add Another to Cart"
-                    : "Add to Cart"}
+                : isInCart
+                  ? "Add Another to Cart"
+                  : "Add to Cart"}
             </button>
             {isInCart && !isOutOfStock && !isLoading && (
               <p className="text-emerald-600 mt-3">
