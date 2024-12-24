@@ -37,6 +37,14 @@ export const ProductDetails = withDataAndState(
       }
     }, [data, id]);
 
+    if (isLoading) {
+      return <div data-testid="loading">Loading...</div>;
+    }
+
+    if (!product) {
+      return <div>Product not found</div>;
+    }
+
     const handleAttributeChange = (
       attributeId: string,
       attributeItemId: string,
@@ -97,24 +105,30 @@ export const ProductDetails = withDataAndState(
                     {currencySymbol} {productPrice}
                   </h6>
                 </div>
-                <button
-                  className={`text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
-                    isLoading || isOutOfStock
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-emerald-400 hover:bg-emerald-500"
-                  }`}
-                  onClick={handleAddToCart}
-                  disabled={isLoading || isOutOfStock}
-                  data-testid="add-to-cart"
-                >
-                  {isLoading
-                    ? "Loading..."
-                    : isOutOfStock
+                <div className="text-sm text-gray-500 mb-2">
+                  Debug: isLoading={isLoading.toString()}, isOutOfStock=
+                  {isOutOfStock.toString()}, productId={id}
+                </div>
+                {isLoading ? (
+                  <div data-testid="loading-button">Loading...</div>
+                ) : (
+                  <button
+                    className={`text-white px-6 py-2 rounded-md transition-colors duration-200 ease-in-out ${
+                      isOutOfStock
+                        ? "bg-red-400 cursor-not-allowed"
+                        : "bg-emerald-400 hover:bg-emerald-500"
+                    }`}
+                    onClick={handleAddToCart}
+                    disabled={isOutOfStock}
+                    data-testid="add-to-cart"
+                  >
+                    {isOutOfStock
                       ? "Out of Stock"
                       : isInCart
                         ? "Add Another to Cart"
                         : "Add to Cart"}
-                </button>
+                  </button>
+                )}
                 {isInCart && !isOutOfStock && (
                   <p className="text-emerald-600 mt-3">
                     This product is already in your cart. You can add another
