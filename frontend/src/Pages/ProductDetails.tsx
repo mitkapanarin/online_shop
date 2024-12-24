@@ -14,6 +14,7 @@ export const ProductDetails = withDataAndState(
     const [selectedAttributes, setSelectedAttributes] = useState<
       Record<string, string>
     >({});
+    const [isDataReady, setIsDataReady] = useState(false);
     const product = useMemo(
       () => data?.data?.products?.find((p) => p.id === id),
       [data, id],
@@ -29,9 +30,10 @@ export const ProductDetails = withDataAndState(
 
     useEffect(() => {
       if (data?.data?.products) {
-        setIsLoading(false);
         const foundProduct = data.data.products.find((p) => p.id === id);
         setIsOutOfStock(foundProduct?.instock === false);
+        setIsLoading(false);
+        setIsDataReady(true);
       }
     }, [data, id]);
 
@@ -108,10 +110,10 @@ export const ProductDetails = withDataAndState(
                   : "bg-emerald-400 hover:bg-emerald-500"
               }`}
               onClick={handleAddToCart}
-              disabled={isOutOfStock || isLoading}
+              disabled={!isDataReady || isOutOfStock || isLoading}
               data-testid="add-to-cart"
             >
-              {isLoading
+              {!isDataReady || isLoading
                 ? "Loading..."
                 : isOutOfStock
                   ? "Out of Stock"
