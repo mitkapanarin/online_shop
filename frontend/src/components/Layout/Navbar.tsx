@@ -5,15 +5,18 @@ import { containerSettings } from "../../_Constants";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { CartModal } from "../Cards";
+import { ICategory } from "../../_Types";
+import { useGetAllProductsQuery } from "../../store/API/fetchDataAPI";
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
   const cart = useSelector((state: RootState) => state.cart.cart);
+  const { data, isLoading } = useGetAllProductsQuery();
   const currentPath = location.pathname;
 
   const pathDetector = (route: string) =>
     currentPath === route
-      ? "text-green-500 border-b-2 border-green-500 pb-3"
+      ? "text-green-600 border-b-2 border-green-500 pb-3"
       : "text-black";
 
   const addDataTestIdFn = (route: string) =>
@@ -30,6 +33,10 @@ export const Navbar: React.FC = () => {
     prevCartLength.current = cart.length;
   }, [cart]);
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <div className={`relative ${containerSettings}`}>
@@ -43,34 +50,16 @@ export const Navbar: React.FC = () => {
             ></div>
           )}
           <div className="uppercase flex gap-6">
-            <Link
-              to="/"
-              data-testid={addDataTestIdFn("/")}
-              className={pathDetector("/")}
-            >
-              Home
-            </Link>
-            <Link
-              to="/all"
-              data-testid={addDataTestIdFn("/all")}
-              className={pathDetector("/all")}
-            >
-              All
-            </Link>
-            <Link
-              to="/clothes"
-              data-testid={addDataTestIdFn("/clothes")}
-              className={pathDetector("/clothes")}
-            >
-              Clothes
-            </Link>
-            <Link
-              to="/tech"
-              data-testid={addDataTestIdFn("/tech")}
-              className={pathDetector("/tech")}
-            >
-              Tech
-            </Link>
+            {data?.data?.categories.map((category: ICategory) => (
+              <Link
+                key={category.name}
+                to={`/${category.name.toLowerCase()}`}
+                data-testid={addDataTestIdFn(`/${category.name.toLowerCase()}`)}
+                className={pathDetector(`/${category.name.toLowerCase()}`)}
+              >
+                {category.name}
+              </Link>
+            ))}
           </div>
           <img src="/store-logo.svg" alt="" />
           <div
