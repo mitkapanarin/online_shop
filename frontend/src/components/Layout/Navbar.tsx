@@ -21,10 +21,13 @@ export const Navbar: React.FC = () => {
 
   const [modalState, setModalState] = React.useState<boolean>(false);
 
+  const prevCartLength = React.useRef(cart.length);
+
   useEffect(() => {
-    if (cart.length > 0) {
+    if (cart.length > prevCartLength.current) {
       setModalState(true);
     }
+    prevCartLength.current = cart.length;
   }, [cart]);
 
   return (

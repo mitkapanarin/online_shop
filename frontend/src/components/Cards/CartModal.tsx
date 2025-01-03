@@ -15,7 +15,7 @@ export const CartModal = withDataAndState(
     return (
       <div
         data-testid="cart-total"
-        className="absolute right-0 t-0 p-3 min-h-[300px] max-h-[80vh] w-[350px] z-10 bg-white overflow-y-auto"
+        className="absolute right-0 top-0 p-3 min-h-[300px] max-h-[80vh] w-[350px] z-10 bg-white overflow-y-auto shadow-lg"
       >
         <div className="flex flex-col gap-3">
           {cartState.length === 0 && (
