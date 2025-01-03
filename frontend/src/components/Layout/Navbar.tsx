@@ -13,7 +13,7 @@ export const Navbar: React.FC = () => {
 
   const pathDetector = (route: string) =>
     currentPath === route
-      ? "text-red-500 border-b-2 border-red-500 pb-3"
+      ? "text-green-500 border-b-2 border-green-500 pb-3"
       : "text-black";
 
   const addDataTestIdFn = (route: string) =>
