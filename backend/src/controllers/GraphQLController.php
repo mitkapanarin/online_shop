@@ -1,20 +1,23 @@
 <?php
+
+namespace Controllers;
+
+use Core\Controller;
+use Core\Database;
 use GraphQL\Type\Schema;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\GraphQL;
 use GraphQL\Error\DebugFlag;
 
-class GraphQLController
+class GraphQLController extends Controller
 {
-    private $mysqli;
+    private $db;
 
-    public function __construct()
+    public function __construct(Database $db)
     {
-        $this->mysqli = new mysqli("3.239.119.81:3306", "root", "eDgK6EDreqkW0ZFs4kNTra69S651L1YMFrO5ORhKWJxUB2OvqHoS9xivmKv1cWrp", "shop_database");
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
+        parent::__construct();
+        $this->db = $db;
     }
 
     public function index()
@@ -40,8 +43,7 @@ class GraphQLController
             $output = ['error' => ['message' => $e->getMessage()]];
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($output);
+        $this->json($output);
     }
 
     private function getCategoriesField()
@@ -49,7 +51,7 @@ class GraphQLController
         return [
             'type' => Type::listOf($this->getCategoryType()),
             'resolve' => function () {
-                $result = $this->mysqli->query("SELECT * FROM categories");
+                $result = $this->db->query("SELECT * FROM categories");
                 return $result->fetch_all(MYSQLI_ASSOC);
             }
         ];
@@ -60,7 +62,7 @@ class GraphQLController
         return [
             'type' => Type::listOf($this->getProductType()),
             'resolve' => function () {
-                $result = $this->mysqli->query("SELECT * FROM products");
+                $result = $this->db->query("SELECT * FROM products");
                 $products = [];
                 while ($row = $result->fetch_assoc()) {
                     $row['instock'] = (bool)$row['instock'];
@@ -154,10 +156,5 @@ class GraphQLController
                 '__typename' => ['type' => Type::string()]
             ]
         ]);
-    }
-
-    public function __destruct()
-    {
-        $this->mysqli->close();
     }
 }
